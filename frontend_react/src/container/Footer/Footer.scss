@@ -1,137 +1,161 @@
-.app__footer {
-    flex: 1;
-    width: 100%;
-    flex-direction: column;
-    text-transform: lowercase;
-  
-    @media screen and (max-width: 768px) {
-      flex-direction: column;
-    }
+.contact-shell {
+  width: min(calc(100% - clamp(3rem, 8vw, 7rem)), 82rem);
+  margin: clamp(7rem, 12vw, 12rem) auto 0;
+  scroll-margin-top: calc(var(--header-height) + 2rem);
+}
 
-    .head-text {
-      font-weight: 800;
-      text-transform: lowercase;
-    }
+.contact-section.paper-panel {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.contact-section > .paper-panel__tape {
+  display: none;
+}
+
+.contact-section .paper-panel__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(17rem, 0.65fr);
+  gap: clamp(2rem, 7vw, 7rem);
+}
+
+.contact-section__main {
+  position: relative;
+}
+
+.contact-section__main::after {
+  position: absolute;
+  top: -1rem;
+  right: 0;
+  width: clamp(5rem, 12vw, 10rem);
+  aspect-ratio: 1;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.55rem var(--paper-elevated), inset 0 0 0 0.65rem var(--ink);
+  content: '';
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.contact-section h2 {
+  position: relative;
+  z-index: 1;
+  max-width: 11ch;
+  margin: 1rem 0 1.5rem;
+  font-family: var(--display-font);
+  font-size: clamp(2.8rem, 6vw, 6rem);
+  font-weight: 740;
+  letter-spacing: -0.065em;
+  line-height: 0.92;
+}
+
+.contact-section__main > p:not(.eyebrow) {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 1.08rem;
+}
+
+.contact-section__email {
+  display: inline-block;
+  margin-top: 2rem;
+  font-family: var(--display-font);
+  font-size: clamp(1.05rem, 2.3vw, 1.65rem);
+  font-weight: 720;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
+}
+
+.contact-section__details {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  padding: 1.5rem;
+  border: 1px solid var(--ink);
+  background: transparent;
+}
+
+.contact-section address {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.45rem 1.25rem;
+  font-style: normal;
+}
+
+.contact-section address span {
+  color: var(--ink-soft);
+  font-family: var(--utility-font);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contact-section address p {
+  margin: 0;
+}
+
+.contact-section__details nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.contact-section__details nav a,
+.contact-section__foot a {
+  font-weight: 700;
+  text-underline-offset: 0.25em;
+}
+
+.contact-section__foot {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ink);
+  color: var(--ink-soft);
+  font-family: var(--utility-font);
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.contact-section__foot p {
+  margin: 0;
+}
+
+@media (max-width: 780px) {
+  .contact-shell {
+    width: calc(100% - 1.5rem);
+    margin: 5.5rem auto 0;
   }
-  
-  .app__footer-cards {
-    width: 60%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: 4em 2rem 2rem;
-  
-    .app__footer-card {
-      min-width: 290px;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-  
-      margin: 1rem 0;
-      padding: 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      background-color: #ffffff;
-  
-      transition: all 0.3s ease-in-out;
-  
-      img {
-        width: 40px;
-        height: 40px;
-        margin: 0 0.7rem;
-      }
-  
-      p {
-        font-weight: 500;
-      }
-      a {
-        text-decoration: none;
-        font-weight: 500;
-      }
-      &:hover {
-        box-shadow: 0 0 30px var(--secondary-color);
-      }
-  
-      @media screen and (max-width: 450px) {
-        width: 100%;
-      }
-    }
-  
-    @media screen and (max-width: 768px) {
-      width: 100%;
-    }
+
+  .contact-section .paper-panel__content {
+    grid-template-columns: 1fr;
   }
-  
-  .app__footer-cards .app__footer-card:last-child {
-    background-color: var(--white-color);
+
+  .contact-section__foot {
+    grid-column: auto;
   }
-  
-  .app__footer-cards .app__footer-card:last-child:hover {
-    box-shadow: 0 0 25px var(--secondary-color);
+
+}
+
+@media (max-width: 460px) {
+  .contact-section address {
+    grid-template-columns: 1fr;
   }
-  
-  .app__footer-form {
-    width: 60%;
+
+  .contact-section address span:not(:first-child) {
+    margin-top: 0.75rem;
+  }
+
+  .contact-section__foot {
     flex-direction: column;
-    margin: 1rem 2rem;
-  
-    div {
-      width: 100%;
-  
-      margin: 0.75rem 0;
-      border-radius: 10px;
-      cursor: pointer;
-      background-color: var(--primary-color);
-  
-      transition: all 0.3s ease-in-out;
-  
-      input,
-      textarea {
-        width: 100%;
-        padding: 0.95rem;
-        border: none;
-        border-radius: 7px;
-        background-color: var(--primary-color);
-        box-shadow: 0 0 20px rgba(0,0,0, 0.1);
-        font-family: var(--font-base);
-        color: var(--secondary-color);
-        outline: none;
-        text-transform: lowercase;
-      }
-  
-      textarea {
-        height: 170px;
-      }
-  
-      &:hover {
-        box-shadow: 0 0 25px var(--primary-color);
-      }
-    }
-  
-    button {
-      padding: 1rem 2rem;
-      border-radius: 10px;
-      border: none;
-      background-color: var(--secondary-color);
-  
-      font-weight: 500;
-      color: var(--white-color);
-      outline: none;
-      margin: 2rem 0 0 0;
-      font-family: var(--font-base);
-      text-transform: lowercase;
-      transition: cubic-bezier(0.55, 0.085, 0.68, 0.53);
-      cursor: pointer;
-  
-      &:hover {
-        background-color: #320252;
-      }
-    }
-  
-    @media screen and (max-width: 768px) {
-      width: 100%;
-      margin: 1rem 0;
-    }
   }
+
+}

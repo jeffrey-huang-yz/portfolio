@@ -1,114 +1,124 @@
-import React, {useState, useEffect} from 'react';
-import {AiFillEye, AiFillGithub} from 'react-icons/ai';
-import {motion} from 'framer-motion';
-import {AppWrap, MotionWrap} from '../../wrapper';
-import {urlFor, client} from '../../client'
+import React, { useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
+import { getImageSrcSet, getImageUrl } from '../../client';
+import { SectionShell } from '../../component';
 import './Work.scss';
 
-const Work = () => {
-  const [activeFilter, setActiveFilter] = useState('All')
-  const [animateCard, setAnimateCard] = useState({y: 0, opacity: 1})
-  const [works, setWorks] = useState([]);
-  const [filterWork, setFilterWork] = useState([]);
-  
-  useEffect(() => {
-    const query = '*[_type == "works"]';
+const filters = ['All', 'Website', 'React JS', 'UI/UX', 'Mobile App'];
 
-    client.fetch(query)
-      .then((data) => {
-        setWorks(data);
-        setFilterWork(data);
-      })
-  }, [])
-  
-  const handleWorkFilter = (item) => {
-    setActiveFilter(item);
-    setAnimateCard([{y:100, opacity: 0}])
+const responsiveSizes = '(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 31vw';
+const localSrcSet = (slug, extension) => [480, 800, 1200]
+  .map((width) => `/project-images/${slug}-${width}.${extension} ${width}w`)
+  .join(', ');
 
-    setTimeout(() => {
-      setAnimateCard([{ y:0, opacity: 1 }]);
-
-      if(item === 'All'){
-        setFilterWork(works);
-      }else {
-        setFilterWork(works.filter((work) => work.tags.includes(item)));
-      }
-    }, 500);
+const ProjectImage = ({ project }) => {
+  if (project.imageSlug) {
+    return (
+      <picture>
+        <source type="image/avif" srcSet={localSrcSet(project.imageSlug, 'avif')} />
+        <source type="image/webp" srcSet={localSrcSet(project.imageSlug, 'webp')} />
+        <img
+          src={`/project-images/${project.imageSlug}-800.jpg`}
+          srcSet={localSrcSet(project.imageSlug, 'jpg')}
+          sizes={responsiveSizes}
+          width="800"
+          height="560"
+          loading="lazy"
+          decoding="async"
+          alt={`${project.title} project preview`}
+        />
+      </picture>
+    );
   }
 
   return (
-    <>
-      <h2 className='head-text'>My Creative <span>Portfolio</span> </h2>
+    <picture>
+      <source type="image/avif" srcSet={getImageSrcSet(project.imgUrl, 'avif')} />
+      <source type="image/webp" srcSet={getImageSrcSet(project.imgUrl, 'webp')} />
+      <img
+        src={getImageUrl(project.imgUrl, 800)}
+        srcSet={getImageSrcSet(project.imgUrl)}
+        sizes={responsiveSizes}
+        width="800"
+        height="560"
+        loading="lazy"
+        decoding="async"
+        alt={`${project.title} project preview`}
+      />
+    </picture>
+  );
+};
 
-      <div className="app__work-filter">
-        {['UI/UX', 'Website', 'Mobile App', 'React JS', 'All'].map((item, index) => (
-          <div
-            key={index}
-            onClick={() => handleWorkFilter(item)}
-            className={`app__work-filter-item app__flex p-text ${activeFilter === item ? 'item-active' : ''}`}
+const Work = ({ works }) => {
+  const [activeFilter, setActiveFilter] = useState('All');
+  const filteredWorks = useMemo(
+    () => activeFilter === 'All'
+      ? works
+      : works.filter((work) => work.tags?.includes(activeFilter)),
+    [activeFilter, works],
+  );
+
+  return (
+    <SectionShell
+      id="work"
+      eyebrow="Selected work / contact sheet"
+      title="Projects across product, platform, and play."
+      intro="A mix of frontend systems, full-stack tools, experiments, and interfaces. Filter quickly or scan the full contact sheet."
+      className="work-section"
+      pageIndex={2}
+    >
+      <div className="work-filter" aria-label="Filter projects">
+        {filters.map((filter) => (
+          <button
+            key={filter}
+            type="button"
+            aria-pressed={activeFilter === filter}
+            onClick={() => setActiveFilter(filter)}
           >
-              {item}
-          </div>
-
+            {filter}
+          </button>
         ))}
       </div>
+      <p className="sr-only" aria-live="polite">
+        {filteredWorks.length} {filteredWorks.length === 1 ? 'project' : 'projects'} shown
+      </p>
 
       <motion.div
-        animate={animateCard}
-        transition={{duration: 0.5, delayChildren: 0.5}}
-        className='app__work-portfolio'
+        key={activeFilter}
+        className="work-grid"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22 }}
       >
-        {filterWork.map((work, index) => (
-          <div className='app__work-item app__flex' key={index}>
-            <div className='app__work-img app__flex'>
-              <img src={urlFor(work.imgUrl)} alt={work.name} />
-
-              <motion.div
-                whileHover={{opacity: [0,1]}}
-                transition={{duration: 0.25, ease: 'easeInOut', staggerChildren: 0.5}}
-                className='app__work-hover app__flex'
-              >
-                <a href={work.projectLink} target='_blank' rel="noreferrer">
-                  <motion.div
-                    whileInView={{scale: [0, 1]}}
-                    whileHover={{scale: [1, 0.9]}}
-                    transition={{duration: 0.25}}
-                    className='app__flex'
-                  >
-                    <AiFillEye />
-                  </motion.div>
-                </a>
-
-                <a href={work.codeLink} target='_blank' rel="noreferrer">
-                  <motion.div
-                    whileInView={{scale: [0, 1]}}
-                    whileHover={{scale: [1, 0.9]}}
-                    transition={{duration: 0.25}}
-                    className='app__flex'
-                  >
-                    <AiFillGithub />
-                  </motion.div>
-                </a>
-              </motion.div>
+        {filteredWorks.map((work) => (
+          <article className="project-card" key={work._id || work.title}>
+            <div className="project-card__media">
+              <ProjectImage project={work} />
+              <ul className="project-card__tags" aria-label={`${work.title} categories`}>
+                {work.tags?.filter((tag) => tag !== 'All').map((tag) => <li key={tag}>{tag}</li>)}
+              </ul>
             </div>
-
-            <div className='app__work-content app__flex'>
-              <h4 className='bold-text'>{work.title}</h4>
-              <p className='p-text' style={{maringTop: 10}}>{work.description}</p>
-
-              <div className='app__work-tag app__flex'>
-                <p className='p-text'> {work.tags[0]}</p>
-              </div> 
+            <div className="project-card__body">
+              <h3>{work.title}</h3>
+              <p>{work.description}</p>
+              <div className="project-card__links">
+                {work.projectLink ? (
+                  <a href={work.projectLink} target="_blank" rel="noreferrer">
+                    Live project <span aria-hidden="true">↗</span>
+                  </a>
+                ) : null}
+                {work.codeLink ? (
+                  <a href={work.codeLink} target="_blank" rel="noreferrer">
+                    Source <span aria-hidden="true">↗</span>
+                  </a>
+                ) : null}
+              </div>
             </div>
-          </div>
+          </article>
         ))}
       </motion.div>
-    </>
-  )
-}
+    </SectionShell>
+  );
+};
 
-export default AppWrap(
-  MotionWrap(Work, 'app__works'), 
-  'work',
-  "app__primarybg",
-);
+export default Work;

@@ -1,207 +1,155 @@
-import React from 'react'
-import {motion} from 'framer-motion';
-import {images} from '../../constants';
-import {AppWrap} from '../../wrapper';
-
+import React, { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import profilePng from '../../assets/profile.png';
+import profile480Avif from '../../assets/profile-480.avif';
+import profile480Webp from '../../assets/profile-480.webp';
+import profile720Avif from '../../assets/profile-720.avif';
+import profile720Webp from '../../assets/profile-720.webp';
+import profile1080Avif from '../../assets/profile-1080.avif';
+import profile1080Webp from '../../assets/profile-1080.webp';
+import { PaperPanel } from '../../component';
 import './Header.scss';
 
-const scaleVariants = {
-  whileInView: {
-      scale: [0,1],
-      opacity: [0,1],
-      transition: {
-        duration: 1,
-        ease: 'easeInOut'
-      }
-  }
-}
+const profilePanels = [
+  {
+    label: 'Overview',
+    title: 'Build with the user in the room.',
+    body: 'I care about the point where engineering decisions, brand character, and everyday usability meet.',
+  },
+  {
+    label: 'Studies',
+    title: 'Computer Engineering',
+    body: 'University of Waterloo · focused on software development and the systems underneath polished interfaces.',
+  },
+  {
+    label: 'Off-screen',
+    title: 'Toronto, beyond the browser',
+    body: 'Basketball, working out, fashion, and music keep the visual and human side of my work switched on.',
+  },
+];
+
 const Header = () => {
-  const cardRef = React.useRef(null);
-  const [rotation, setRotation] = React.useState({ x: 0, y: 0 });
+  const [activePanel, setActivePanel] = useState(0);
+  const tabRefs = useRef([]);
+  const panel = profilePanels[activePanel];
 
-  const handleMouseMove = (e) => {
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const rotateY = (x / rect.width) * 20;  // left/right
-    const rotateX = (-y / rect.height) * 20; // up/down
-    setRotation({ x: rotateX, y: rotateY });
+  const handleTabKeyDown = (event, index) => {
+    const lastIndex = profilePanels.length - 1;
+    let nextIndex = index;
+
+    if (event.key === 'ArrowRight') nextIndex = index === lastIndex ? 0 : index + 1;
+    else if (event.key === 'ArrowLeft') nextIndex = index === 0 ? lastIndex : index - 1;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = lastIndex;
+    else return;
+
+    event.preventDefault();
+    setActivePanel(nextIndex);
+    tabRefs.current[nextIndex]?.focus();
   };
-
-  const handleLeave = () => {
-    setRotation({ x: 0, y: 0 });
-  };
-
-  const [layer, setLayer] = React.useState(0);
-
-  const layers = [
-    {
-      title: 'Overview',
-      content: (
-        <>
-          <h2 style={{ margin: 0, fontSize: 26, letterSpacing: 0.5, textAlign: 'center' }}>
-            Jeffrey Huang
-          </h2>
-          <p style={{ margin: '6px 0 0', fontSize: 14, lineHeight: 1.5, opacity: 0.85 }}>
-            Passionate about all things tech and building with user experience/brand in mind.
-          </p>
-
-        </>
-      )
-    },
-    {
-      title: 'Academics',
-      content: (
-        <>
-          <h2 style={{ margin: 0, fontSize: 24, textAlign: 'center' }}>Academic Profile</h2>
-            <ul style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, lineHeight: 1.55 }}>
-              <li>Program: Computer Engineering</li>
-              <li>University: University of Waterloo</li>
-              <li>Year: 2B </li>
-              <li>Focus: Software Development</li>
-            </ul>
-        </>
-      )
-    },
-    {
-      title: 'Personal',
-      content: (
-        <>
-          <h2 style={{ margin: 0, fontSize: 24, textAlign: 'center' }}>About Me</h2>
-          <ul style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, lineHeight: 1.55 }}>
-            <li>Age: 20</li>
-            <li>Interests: Basketball, Working Out, Fashion, Music</li>
-            <li>Location: Toronto, Canada</li>
-          </ul>
-        </>
-      )
-    },
-  ];
 
   return (
-    <div id='home' className='app__header app__flex'>
-      <motion.div
-        whileInView={{ x: [-100, 0], opacity: [0, 1] }}
-        transition={{ duration: 1.25 }}
-        className='app__header-info'
+    <section id="home" className="hero-section" aria-labelledby="hero-title">
+      <PaperPanel
+        className="hero-scrap"
+        pageIndex={0}
       >
-        <div className='app__header-badge'>
-          <div className='badge-cmp app__flex'>
-            <span>👋</span>
-            <div style={{ marginLeft: 20 }}>
-              <p className="p-text">hello, i'm</p>
-              <h1 className='head-text'>jeffrey huang</h1>
-            </div>
+        <div className="hero-section__grid">
+        <motion.div
+          className="hero-copy"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <p className="eyebrow">Jeffrey Huang · Frontend-minded engineer</p>
+          <h1 id="hero-title">
+            Interfaces should feel <em>obvious</em>—and a little <span>alive.</span>
+          </h1>
+          <p className="hero-copy__intro">
+            I’m a Computer Engineering student at the University of Waterloo, building
+            thoughtful digital products with user experience and brand in mind.
+          </p>
+          <div className="hero-copy__actions">
+            <a className="button button--primary" href="#work">Explore selected work</a>
+            <a className="text-link" href="mailto:j222huan@uwaterloo.ca">
+              Start a conversation <span aria-hidden="true">↗</span>
+            </a>
           </div>
+          <ul className="hero-facts" aria-label="Quick facts">
+            <li><span>Based</span>Toronto, Canada</li>
+            <li><span>Focus</span>Frontend + product</li>
+            <li><span>Mode</span>Curious, hands-on</li>
+          </ul>
+        </motion.div>
 
-          <div className='tag-cmp app__flex'>
-            <p className="p-text">Computer Eng. Student at UWaterloo</p>
-            <p className="p-text2">Aspiring engineer and developer</p>
+        <motion.div
+          className="hero-portrait"
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.56, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="hero-portrait__field" aria-hidden="true">
+            <span>make / test / refine</span>
           </div>
+          <picture>
+            <source
+              type="image/avif"
+              srcSet={`${profile480Avif} 480w, ${profile720Avif} 720w, ${profile1080Avif} 1080w`}
+              sizes="(max-width: 720px) 88vw, (max-width: 1100px) 46vw, 520px"
+            />
+            <source
+              type="image/webp"
+              srcSet={`${profile480Webp} 480w, ${profile720Webp} 720w, ${profile1080Webp} 1080w`}
+              sizes="(max-width: 720px) 88vw, (max-width: 1100px) 46vw, 520px"
+            />
+            <img
+              src={profilePng}
+              width="1080"
+              height="1440"
+              fetchPriority="high"
+              alt="Jeffrey Huang wearing a navy suit"
+            />
+          </picture>
+          <p className="hero-portrait__note">I like the details people feel before they notice.</p>
+        </motion.div>
         </div>
-      </motion.div>
 
-      <div
-        className="app__header-3d-wrapper"
-        style={{
-          perspective: '1200px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flex: 1,
-          minHeight: 400
-        }}
-      >
-        <motion.div
-          ref={cardRef}
-          onMouseMove={handleMouseMove}
-            onMouseLeave={handleLeave}
-          whileInView={{ opacity: [0, 1], scale: [0.9, 1] }}
-          transition={{ duration: 1 }}
-          className="threeD-card"
-          style={{
-            width: 340,
-            height: 440,
-            borderRadius: 24,
-            position: 'relative',
-            transformStyle: 'preserve-3d',
-            transformPerspective: 1200,
-            rotateX: rotation.x,
-            rotateY: rotation.y,
-            willChange: 'transform',
-            background: '#7400d8',
-            backgroundImage: 'linear-gradient(145deg,#7b2ff7 0%, #6116c7 50%, #470087 100%)',
-            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.55)',
-            padding: 26,
-            cursor: 'grab',
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 14,
-            color: '#fff'
-          }}
-        >
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at 30% 20%, rgba(255,255,255,0.12), transparent 60%)',
-              pointerEvents: 'none'
-            }}
-          />
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {layers.map((l, i) => (
-              <button
-                key={l.title}
-                onClick={() => setLayer(i)}
-                style={{
-                  background: i === layer ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.07)',
-                  border: '1px solid rgba(255,255,255,0.18)',
-                  color: '#fff',
-                  fontSize: 11,
-                  padding: '4px 10px',
-                  borderRadius: 30,
-                  cursor: 'pointer',
-                  letterSpacing: 0.5,
-                  backdropFilter: 'blur(4px)',
-                  transition: 'background .25s'
-                }}
-              >
-                {l.title}
-              </button>
-            ))}
-          </div>
-
-          <motion.div
-            key={layer}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.35 }}
-            style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6, overflowY: 'auto', paddingRight: 4 }}
-          >
-            {layers[layer].content}
-          </motion.div>
-
-          <div style={{ marginTop: 'auto', fontSize: 11, letterSpacing: 0.5, opacity: 0.65, textAlign: 'center' }}>
-            Hover to rotate • Click tabs to explore
-          </div>
-        </motion.div>
-
-        <motion.div
-          variant={scaleVariants}
-          whileInView={scaleVariants.whileInView}
-          className="app__header-circles"
-        >
-          {[images.cpp, images.css, images.html].map((circle, index) => (
-            <div className="circle-cmp app__flex" key={`circle-${index}`}>
-              <img src={circle} alt="circle" />
-            </div>
+        <div className="profile-ledger">
+        <div className="profile-ledger__tabs" role="tablist" aria-label="About Jeffrey">
+          {profilePanels.map(({ label }, index) => (
+            <button
+              ref={(element) => { tabRefs.current[index] = element; }}
+              id={`profile-tab-${index}`}
+              key={label}
+              type="button"
+              role="tab"
+              aria-selected={activePanel === index}
+              aria-controls="profile-panel"
+              tabIndex={activePanel === index ? 0 : -1}
+              onClick={() => setActivePanel(index)}
+              onKeyDown={(event) => handleTabKeyDown(event, index)}
+            >
+              {label}
+            </button>
           ))}
+        </div>
+        <motion.div
+          id="profile-panel"
+          key={panel.label}
+          className="profile-ledger__panel"
+          role="tabpanel"
+          aria-labelledby={`profile-tab-${activePanel}`}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <h2>{panel.title}</h2>
+          <p>{panel.body}</p>
         </motion.div>
-      </div>
-    </div>
-  )
-}
+        </div>
+      </PaperPanel>
+    </section>
+  );
+};
 
-export default AppWrap(Header, 'home');
+export default Header;

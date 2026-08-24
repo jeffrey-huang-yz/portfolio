@@ -1,47 +1,104 @@
-.app__about{
-    flex: 1;
-    width: 100%;
-    flex-direction: column;
+.capability-list {
+  border-top: 1px solid var(--line-strong);
 }
 
-.app__profiles-text {
-  .head-text{
-    font-weight: 800;
-    text-transform: lowercase;
+.capability {
+  display: grid;
+  grid-template-columns: 5rem minmax(12rem, 0.45fr) minmax(0, 1fr);
+  gap: clamp(1rem, 4vw, 4rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+}
+
+.capability__mark {
+  width: fit-content;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  font-family: var(--utility-font);
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+}
+
+.capability h3,
+.capability p {
+  margin: 0;
+}
+
+.capability h3 {
+  font-family: var(--display-font);
+  font-size: clamp(1.4rem, 2.4vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.capability p {
+  max-width: 45rem;
+  color: var(--ink-soft);
+}
+
+.interest-note {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.35fr) minmax(0, 1fr) minmax(14rem, 0.55fr);
+  gap: clamp(1rem, 4vw, 4rem);
+  align-items: center;
+  margin-top: clamp(3rem, 7vw, 6rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-left: 0.35rem solid var(--coral);
+  background: var(--paper-muted);
+}
+
+.interest-note > p:last-child {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.interest-note ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.interest-note li {
+  padding: 0.35rem 0.6rem;
+  background: var(--paper-elevated);
+  box-shadow: 2px 3px 0 color-mix(in srgb, var(--line-strong) 40%, transparent);
+  font-family: var(--utility-font);
+  font-size: 0.72rem;
+  font-weight: 700;
+  transform: rotate(-1deg);
+}
+
+.interest-note li:nth-child(even) {
+  transform: rotate(1.3deg);
+}
+
+@media (max-width: 780px) {
+  .capability {
+    grid-template-columns: 3.5rem 1fr;
+  }
+
+  .capability p {
+    grid-column: 2;
+  }
+
+  .interest-note {
+    grid-template-columns: 1fr;
   }
 }
 
-.app__profiles {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-top: 2rem;
+@media (max-width: 480px) {
+  .capability {
+    grid-template-columns: 1fr;
+  }
 
-}
-
-.app__profile-item {
-    width: 190px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
-    margin: 2rem;
-
-
-    img {
-        width: 100%;
-        height: 170px;
-        border-radius: 15px;
-        object-fit: cover;
-    }
-
-    @media screen and (min-width: 2000px) {
-        width: 370px;
-        margin: 2rem 4rem;
-
-        img {
-            height: 320px;
-        }
-    }
+  .capability p {
+    grid-column: auto;
+  }
 }

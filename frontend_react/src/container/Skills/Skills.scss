@@ -1,164 +1,136 @@
-
-
-
-.app__skills {
-    flex: 1;
-    width: 100%;
-    flex-direction: column;
-    .head-text{
-      font-weight: 800;
-      text-transform: lowercase;
-    } 
+.skills-layout {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(3rem, 7vw, 7rem);
+  align-items: start;
 }
 
-.app__skills-container {
-    width: 80%;
-    margin-top: 3rem;
-    display: flex;
-    flex-direction: row;
-    @media screen and (max-width: 900px) {
-        width: 100%;
-        flex-direction: column;
-    }
+.skill-cloud h3,
+.experience-trail h3 {
+  margin: 0 0 1.5rem;
+  font-family: var(--utility-font);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.app__skills-list {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin-right: 5rem;
-
-    @media screen and (max-width: 900px) {
-        margin-right: 0;
-        justify-content: center;
-        align-items: center;
-    }
+.skill-cloud ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
-.app__skills-item {
-    flex-direction: column;
-    text-align: center;
-    margin: 1rem;
-    transition: all 0.3s ease-in-out;
-
-    div{
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        background-color: #fff;
-
-        img {
-            width: 50%;
-            height: 50%;
-
-        }
-
-        &:hover {
-            box-shadow: 0 0 20px var(--secondary-color);
-        }
-
-        @media screen and (min-width: 2000px) {
-            width: 150px;
-            height: 150px;
-        }
-
-        @media screen and (min-width: 2000px) {
-            width: 70px;
-            height: 70px;
-        }
-
-    }
-
-    p {
-        font-weight: 800;
-        margin-top: 0.5rem;
-        text-transform: uppercase;
-        
-        
-    }
-
-    @media screen and (min-width: 2000px) {
-        margin: 1rem 2rem;
-        
-        p {
-            margin-top: 1rem;
-        }
-    }
+.skill-cloud li {
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: var(--utility-font);
+  font-size: 0.7rem;
+  font-weight: 650;
 }
 
-.app__skills-exp {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
-  
-    @media screen and (max-width: 900px) {
-      margin-top: 2rem;
-    }
+.skill-cloud li:nth-child(3n + 1) {
+  border-color: color-mix(in srgb, var(--blue) 65%, var(--line));
+}
+
+.skill-cloud li:nth-child(4n + 2) {
+  border-color: color-mix(in srgb, var(--violet) 65%, var(--line));
+}
+
+.experience-trail ol {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.experience-trail > ol > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding: 0 0 2.5rem;
+}
+
+.experience-trail > ol > li::before {
+  position: absolute;
+  top: 0.55rem;
+  bottom: 0;
+  left: 4.15rem;
+  width: 1px;
+  background: var(--line);
+  content: '';
+}
+
+.experience-trail > ol > li::after {
+  position: absolute;
+  top: 0.38rem;
+  left: 3.9rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 2px solid var(--paper-elevated);
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 0 1px var(--blue);
+  content: '';
+}
+
+.experience-trail time {
+  color: var(--blue);
+  font-family: var(--utility-font);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+}
+
+.experience-trail article + article {
+  margin-top: 1.7rem;
+  padding-top: 1.7rem;
+  border-top: 1px dashed var(--line);
+}
+
+.experience-trail h4 {
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(1.3rem, 2vw, 1.85rem);
+  font-weight: 720;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.experience-trail p {
+  max-width: 42rem;
+  margin: 0.65rem 0 0;
+  color: var(--ink-soft);
+}
+
+.experience-trail .experience-trail__company {
+  margin-top: 0.35rem;
+  color: var(--violet);
+  font-family: var(--utility-font);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+@media (max-width: 820px) {
+  .skills-layout {
+    grid-template-columns: 1fr;
   }
-  
-  .app__skills-exp-item {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin: 1rem 0;
+}
+
+@media (max-width: 430px) {
+  .experience-trail > ol > li {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
   }
-  
-  .app__skills-exp-works {
-    flex: 1;
-  
-    .app__skills-exp-work {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      margin-bottom: 1rem;
-      cursor: pointer;
-  
-      h4 {
-        font-weight: 500;
-      }
-  
-      p {
-        font-weight: 400;
-        color: var(--gray-color);
-        margin-top: 5px;
-      }
-    }
+
+  .experience-trail > ol > li::before {
+    left: 3.15rem;
   }
-  
-  .app__skills-exp-year {
-    margin-right: 3rem;
-  
-    p {
-      font-weight: 800;
-      color: var(--secondary-color);
-    }
-  
-    @media screen and (max-width: 450px) {
-      margin-right: 1rem;
-    }
+
+  .experience-trail > ol > li::after {
+    left: 2.9rem;
   }
-  
-  .skills-tooltip {
-    max-width: 300px !important;
-    background-color: var(--white-color) !important;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.1) !important;
-    border-radius: 5px !important;
-    padding: 1rem !important;
-    color: var(--gray-color) !important;
-    text-align: center !important;
-    line-height: 1.5 !important;
-    opacity: 1 !important;
-  
-    @media screen and (min-width: 2000px) {
-      font-size: 1.75rem !important;
-      max-width: 500px !important;
-      line-height: 2 !important;
-    }
-  }
+}

@@ -8,6 +8,7 @@ const NavigationDots = ({ active }) => {
                 href= {`#${item}`}
                 key={item + index}
                 className= "app__navigation-dot"
+                aria-label={`Go to ${item}`}
                 style={active === item ? {backgroundColor: '#9900ff'} : {}}
             />
      

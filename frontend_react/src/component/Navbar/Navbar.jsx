@@ -1,61 +1,137 @@
-import React, { useState } from 'react';
-import { images } from '../../constants';
-import './Navbar.scss';
-import { HiMenuAlt4, HiX } from 'react-icons/hi';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-const Navbar = () => {
-  const [toggle, setToggle] = useState(false);
+import { navItems } from '../../data/portfolio';
+import ThemeToggle from '../ThemeToggle';
+import './Navbar.scss';
+
+const NavLinks = ({ activeSection, onNavigate, mobile = false }) => (
+  <ul className={mobile ? 'mobile-nav__links' : 'site-nav__links'}>
+    {navItems.map(({ id, label }) => (
+      <li key={id}>
+        <a
+          href={`#${id}`}
+          aria-current={activeSection === id ? 'location' : undefined}
+          onClick={onNavigate}
+        >
+          {label}
+        </a>
+      </li>
+    ))}
+    <li>
+      <a
+        className="resume-link"
+        href="/JeffreyResume.pdf"
+        target="_blank"
+        rel="noreferrer"
+        onClick={onNavigate}
+      >
+        Résumé <span aria-hidden="true">↗</span>
+      </a>
+    </li>
+  </ul>
+);
+
+const Navbar = ({ activeSection }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const mobileNavRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+        return;
+      }
+
+      if (event.key === 'Tab') {
+        const focusable = mobileNavRef.current?.querySelectorAll('a[href], button:not([disabled])');
+        if (!focusable?.length) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
-    <nav className="app__navbar">
-      <div className="app__navbar-logo">
-        <img src={images.logo} alt="logo" />
-      </div>
-      <ul className="app__navbar-links">
-        {['home', 'about', 'work', 'skills', 'contact', 'resume'].map((item) => (
-          <li className="app__flex p-text" key={`link-${item}`}>
-            <a href={`#${item}`} onClick={() => setToggle(false)}>
-              {item === 'resume' ? (
-                <span onClick={() => window.open('JeffreyResume.pdf', '_blank')}>
-                  {item}
-                </span>
-              ) : (
-                item
-              )}
-            </a>
-            <div />
-          </li>
-        ))}
-      </ul>
+    <header className="site-header">
+      <nav className="site-nav" aria-label="Primary navigation">
+        <a className="site-nav__brand" href="#home" aria-label="Jeffrey Huang, home">
+          <span>JH</span><i aria-hidden="true">.</i>
+        </a>
 
-      <div className="app__navbar-menu">
-        <HiMenuAlt4 onClick={() => setToggle(true)} />
+        <NavLinks activeSection={activeSection} />
 
-        {toggle && (
-          <motion.div
-            whileInView={{ x: [300, 0] }}
-            transition={{ duration: 0.85, ease: 'easeOut' }}
+        <div className="site-nav__actions">
+          <ThemeToggle />
+          <button
+            ref={menuButtonRef}
+            type="button"
+            className="menu-button"
+            aria-label="Open navigation menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setMenuOpen(true)}
           >
-            <HiX onClick={() => setToggle(false)} />
-            <ul>
-              {['home', 'about', 'work', 'skills', 'contact', 'resume'].map((item) => (
-                <li key={item}>
-                  <a href={`#${item}`} onClick={() => setToggle(false)}>
-                    {item === 'resume' ? (
-                      <span onClick={() => window.open('JeffreyResume.pdf.pdf', '_blank')}>
-                        {item}
-                      </span>
-                    ) : (
-                      item
-                    )}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </div>
-    </nav>
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+          </button>
+        </div>
+      </nav>
+
+      {menuOpen ? (
+        <motion.div
+          ref={mobileNavRef}
+          id="mobile-navigation"
+          className="mobile-nav"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          initial={{ opacity: 0, x: 28 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 28 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="mobile-nav__topline">
+            <span className="eyebrow">Jump to a page</span>
+            <button
+              ref={closeButtonRef}
+              type="button"
+              className="mobile-nav__close"
+              onClick={closeMenu}
+              aria-label="Close navigation menu"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <nav aria-label="Mobile navigation">
+            <NavLinks activeSection={activeSection} onNavigate={closeMenu} mobile />
+          </nav>
+        </motion.div>
+      ) : null}
+    </header>
   );
 };
 
