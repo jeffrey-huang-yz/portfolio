@@ -1,10 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { getImageSrcSet, getImageUrl } from '../../client';
 import { SectionShell } from '../../component';
 import './Work.scss';
 
-const filters = ['All', 'Website', 'React JS', 'UI/UX', 'Mobile App'];
+const filters = ['all', 'web app', 'react app'];
+const projectsHeading = (
+  <span className="work-heading-word" aria-label="projects">
+    {'projects'.split('').map((letter, index) => (
+      <span key={`${letter}-${index}`} aria-hidden="true">{letter}</span>
+    ))}
+  </span>
+);
 
 const responsiveSizes = '(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 31vw';
 const localSrcSet = (slug, extension) => [480, 800, 1200]
@@ -51,6 +58,7 @@ const ProjectImage = ({ project }) => {
 
 const Work = ({ works }) => {
   const [activeFilter, setActiveFilter] = useState('All');
+  const reduceMotion = useReducedMotion();
   const filteredWorks = useMemo(
     () => activeFilter === 'All'
       ? works
@@ -61,9 +69,7 @@ const Work = ({ works }) => {
   return (
     <SectionShell
       id="work"
-      eyebrow="Selected work / contact sheet"
-      title="Projects across product, platform, and play."
-      intro="A mix of frontend systems, full-stack tools, experiments, and interfaces. Filter quickly or scan the full contact sheet."
+      title={projectsHeading}
       className="work-section"
       pageIndex={2}
     >
@@ -86,35 +92,40 @@ const Work = ({ works }) => {
       <motion.div
         key={activeFilter}
         className="work-grid"
-        initial={{ opacity: 0, y: 10 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22 }}
       >
         {filteredWorks.map((work) => (
-          <article className="project-card" key={work._id || work.title}>
-            <div className="project-card__media">
-              <ProjectImage project={work} />
-              <ul className="project-card__tags" aria-label={`${work.title} categories`}>
-                {work.tags?.filter((tag) => tag !== 'All').map((tag) => <li key={tag}>{tag}</li>)}
-              </ul>
-            </div>
-            <div className="project-card__body">
-              <h3>{work.title}</h3>
-              <p>{work.description}</p>
-              <div className="project-card__links">
-                {work.projectLink ? (
-                  <a href={work.projectLink} target="_blank" rel="noreferrer">
-                    Live project <span aria-hidden="true">↗</span>
-                  </a>
-                ) : null}
-                {work.codeLink ? (
-                  <a href={work.codeLink} target="_blank" rel="noreferrer">
-                    Source <span aria-hidden="true">↗</span>
-                  </a>
-                ) : null}
+          <div
+            className="project-card-reveal"
+            key={work._id || work.title}
+          >
+            <article className="project-card">
+              <div className="project-card__media">
+                <ProjectImage project={work} />
+                <ul className="project-card__tags" aria-label={`${work.title} categories`}>
+                  {work.tags?.filter((tag) => tag !== 'All').map((tag) => <li key={tag}>{tag}</li>)}
+                </ul>
               </div>
-            </div>
-          </article>
+              <div className="project-card__body">
+                <h3>{work.title}</h3>
+                <p>{work.description}</p>
+                <div className="project-card__links">
+                  {work.projectLink ? (
+                    <a href={work.projectLink} target="_blank" rel="noreferrer">
+                      Live project <span aria-hidden="true">↗</span>
+                    </a>
+                  ) : null}
+                  {work.codeLink ? (
+                    <a href={work.codeLink} target="_blank" rel="noreferrer">
+                      Source <span aria-hidden="true">↗</span>
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+            </article>
+          </div>
         ))}
       </motion.div>
     </SectionShell>

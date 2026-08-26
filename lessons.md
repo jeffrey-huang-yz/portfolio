@@ -267,3 +267,189 @@
 - Overlap works best when it communicates ownership: a project image or artifact physically breaking out of its dossier reads as evidence attached to that project, while unrelated overlap reads as decoration.
 - Small credibility details are strongest at composition edges, where they establish context without competing with the hero thesis.
 - A portfolio ending should be intentional. Moving directly from the last project outcome into a compact contact action produces a clearer terminus than adding another decorative chapter or empty runway.
+
+## Prioritizing identity in a portfolio hero
+
+- A portfolio’s only `h1` should answer who the person is before expressing a design philosophy. The name carries the display hierarchy; a smaller occupation line supplies immediate professional context without competing with it.
+- When both lines belong to one heading, separate spans preserve one semantic title while allowing display and utility typography to establish a clear visual hierarchy.
+
+## Making display type genuinely architectural
+
+- A block that is `width: 100%` does not make its glyphs visually span that width. Measure or inspect the rendered word itself, then tune the font scale for its actual character widths.
+- Long and short names need different responsive scales. Separate first- and last-name classes allow both words to approach the same visual measure without artificial character spacing or stretched transforms.
+- A bold system sans paired with a high-contrast system serif can create a strong modern/editorial shift without adding font requests, layout delay, or another runtime dependency.
+- Preserve a dedicated mobile scale rather than letting an intentionally oversized desktop masthead interpolate downward unchecked; this keeps the typographic gesture without causing horizontal overflow.
+
+## Rendering Unicode ASCII art responsively
+
+- Character count alone does not determine a text portrait’s width. Mathematical symbols can fall back to a font whose cells are wider than ordinary monospace glyphs, so compare the rendered `scrollWidth` and `clientWidth` before trusting the nominal grid.
+- A fixed 100×73 source can remain responsive by placing it in a square container-query context and deriving font size from `cqw`; adjust line-height independently so width and height both fill the frame.
+- Keep dense ASCII source in a separate emitted text asset and fetch it from the same origin. This preserves the original characters without inflating the initial JavaScript bundle.
+- Reserve the layout space before the asynchronous text arrives. A fixed aspect ratio prevents layout shift, while a figure label supplies an accessible equivalent and the dense character field remains hidden from screen readers.
+- If an ASCII portrait replaces a raster portrait, remove the raster imports rather than merely hiding the image. The build can then exclude all responsive photo variants entirely.
+
+## Framing artwork and its metadata
+
+- Put an artwork border on the element that establishes the artwork’s dimensions, not on the parent figure when that figure also contains a caption. Otherwise the visible frame describes two different content roles at once.
+- Keep captions semantically inside `<figure>` but visually outside the artwork border. This preserves the relationship for assistive technology while making the physical edge unambiguous.
+- Apply scrapbook registration shadows to the framed viewport itself. The shadow then tracks the actual artifact instead of appearing detached beneath a larger caption-bearing wrapper.
+
+## Correcting a loose artwork frame without changing its scope
+
+- Supersede the artwork-only framing guidance above for this portrait: the intended frame describes the complete scrapbook figure, including its caption.
+- When one edge appears to contain excess empty space, inspect parent padding before relocating the border. Moving the frame changes what the component communicates; removing the unwanted inset fixes the geometry without changing that relationship.
+- Put spacing on the child that needs it. Here the artwork is flush with the figure frame while the caption alone owns its internal padding.
+
+## Fitting Unicode character art by rendered geometry
+
+- Supersede the flush-frame conclusion above: a small uniform mat is useful because it keeps the outer scrapbook frame legible against a dense character field. The problem was the large asymmetric void inside the artwork window, not the presence of a deliberate frame inset.
+- A nominal `100 × 73` character grid does not determine its visual aspect ratio. Unicode integral and square-root symbols can fall back to glyphs whose advance width is much smaller than their line box, even inside a monospace stack.
+- Measure the rendered text range, not the `<pre>` element's client or scroll width; an absolutely positioned block reports its container width even when its glyphs occupy far less space.
+- Correct font size and line height as a pair. Increasing only the font size fills the width but clips lower rows; tightening the line height at the same time lets the full portrait fill a square viewport without horizontal stretching.
+
+## Extending an ASCII canvas without changing the portrait
+
+- If the portrait proportions are already correct, do not use typographic compression to solve unused canvas width. That changes the perceived face even when every source character remains present.
+- Preserve the original rows and extend only the background side of the character field. Reusing each row's own edge texture keeps its local density and symbol language consistent without redrawing the subject.
+- Treat the character dimensions as real metadata. When the source grows from 100 to 119 columns, update the visible caption and verify every row has the same new width.
+- When the filler glyph is explicitly specified, use a uniform suffix rather than extrapolating nearby texture; this makes the modification predictable and keeps the original portrait columns untouched.
+- When multiple filler glyphs describe top and middle regions, divide by source rows rather than visual pixels so the bands remain deterministic at every responsive size.
+
+## Simplifying a content-rich portfolio hero
+
+- Keeping information does not require keeping cards. Short facts read more calmly as ruled `dt`/`dd` rows, preserving scanability and semantics while reducing visual weight.
+- When persistent navigation already supplies section access, duplicate hero buttons create noise without improving wayfinding. Removing them lets the identity and role become the clear first read.
+- Tabbed biography content adds interaction cost and hides useful context. Moving the same copy into an always-visible About composition improves reading order, accessibility, and JavaScript simplicity.
+- A minimal hero benefits from one coordinated entrance rather than separate animations on every line and artifact; motion should introduce the composition, not compete with it.
+- An expressive asset can remain inside a modern layout when its container is quiet. A thin, square frame and deliberate alignment let the ASCII portrait provide personality without making the entire hero feel ornamental.
+
+## Turning profile metadata into two direct columns
+
+- When every line has equal rhetorical weight, label/value pairs add hierarchy the content does not need. Two semantic lists can communicate role, scope, education, and location more directly.
+- Keep the visual instruction and the semantic structure aligned: two visible columns should be two real lists, not one list positioned into columns with layout-only ordering.
+- Lowercase medium-weight sans serif text feels calm only when line lengths remain short. Let narrow layouts wrap within each column instead of shrinking the type excessively or changing the requested column count.
+- A small static rotation is enough to return scrapbook character to one artifact. Reducing the angle on mobile protects the torn-paper margin without requiring breakpoint-specific markup or motion.
+
+## Using alignment instead of separators
+
+- Opposing text alignment can establish two distinct information zones without a vertical rule: anchor one list to the left edge and the other to the right edge, then let the empty center act as the separator.
+- When list semantics are useful but bullets are visually unnecessary, keep the `<ul>` structure and remove both `list-style` markers and generated pseudo-content. Accessibility does not require ornamental markers.
+- To reclaim empty hero space, adjust the masthead's internal inset rather than applying a negative transform. Padding changes preserve normal flow, route measurements, and the relationship between the masthead and the information below it.
+
+## Overriding shared panel spacing locally
+
+- When a shared scrapbook panel's padding creates unwanted whitespace in one chapter, override only that chapter's relevant edge instead of weakening the global panel rhythm.
+- A compound selector such as `.paper-panel.hero-scrap` makes the local top inset deterministic across the shared mobile `.paper-panel` rule without resorting to `!important` or transforms.
+- Measure clearance from the actual panel border after the override. Here a 32–48 px rendered name inset keeps the raised masthead safely separated from the tape, stamp, and border.
+
+## Removing optional section labels semantically
+
+- If a reusable section eyebrow is optional, omit its element entirely rather than rendering an empty paragraph or hiding text with CSS. This keeps the accessibility tree and DOM aligned with the visible design.
+- Preserve intentional editorial whitespace with layout state, not placeholder content. An explicit no-eyebrow modifier can hold the main heading in column two on desktop and reset it to column one at the mobile breakpoint.
+- Matching an existing type treatment means matching the full stack and weight, not only choosing another serif. The About heading now uses the same Times New Roman/Times fallback chain and weight 400 as the hero surname.
+
+## Placing wide character art in an editorial heading
+
+- Preserve supplied fixed-width art as one newline-joined source value rather than reconstructing it with positioned fragments; this keeps deliberate spacing and glyph relationships reviewable.
+- Size character art by rendered geometry, not line count. The desktop map needed enough scale to read while retaining breathing room before the heading; a separate fluid mobile scale prevents the longest row from widening the document.
+- When a decorative margin disappears at a responsive breakpoint, stack its artifact before the heading instead of shrinking it into illegibility. This preserves the content-first DOM order and lets the composition remain recognizable.
+- A reusable heading-art slot is preferable to section-specific absolute positioning: the art stays in normal flow, cannot desynchronize route measurements, and can remain `aria-hidden` when equivalent meaning already exists in text.
+
+## Preserving intentional whitespace in character art
+
+- Leading whitespace is part of the drawing, not formatting noise. Store supplied character art as one raw template literal when indentation varies by row; a visually tidy array can accidentally normalize the silhouette.
+- Verify the source shape independently from the render by recording each row's leading-space count. This catches broken geography before CSS or font fallback complicates the diagnosis.
+- Readability sometimes requires changing the surrounding grid, not merely increasing `font-size`. Giving the artwork a real half-width column at large screens and stacking it earlier lets the glyphs grow without overlapping the heading or creating page overflow.
+
+## Enlarging character art without enlarging its footprint
+
+- Rearrangement can create more scale than compression. Separating two side-by-side drawings and stacking them reduced the widest row from roughly 69 character cells to 26, allowing an 80% larger font inside a narrower box.
+- Preserve each drawing's internal indentation while normalizing only the space between drawings. This retains recognizable silhouettes without carrying over the empty geographic distance from the original combined map.
+- When static visual JSX has no component inputs, hoist it to module scope. The result documents the artifact as fixed content and avoids recreating an identical element tree during renders.
+
+## Staggering stacked artwork within a fixed measure
+
+- A full-width internal grid does not enlarge the parent layout; it creates alignment space inside the existing column. Individual fixed-width drawings can then anchor to opposing edges without changing surrounding content geometry.
+- Increase glyph scale only after measuring the larger drawing against the column's narrowest side-by-side breakpoint. Here Asia remains inside the first column with 43 px of separation from the heading at 1440 px.
+
+## Making a label part of the artwork's structure
+
+- If a label must read between two drawings, give it its own grid row rather than positioning it over an incidental gap. The composition then survives font and viewport changes without overlap.
+- A small symmetric negative margin can create controlled visual bleed while the parent column and document width stay unchanged; verify `scrollWidth` at the narrowest viewport after applying it.
+- Separate row gaps communicate deliberate vertical distance more reliably than a negative margin on the lower drawing.
+
+## Layering a grid behind character art
+
+- A hollow radial-gradient mark reads as a perforation rather than another paper dot, allowing two nearby grid systems to remain visually distinct.
+- Put generated texture on a pseudo-element and raise the real artwork one layer above it; this avoids adding decorative DOM or assets and keeps the effect effectively free at runtime.
+- Protect small text with a local opaque backing, and fade a dense texture at its outer boundary so it reads as part of the artwork rather than as a new rectangular panel.
+
+## Distributing an unknown number of labels across a panel
+
+- Flex growth is a better fit than a fixed column count when the number of short labels can change. Each ticket receives equal leftover width without introducing empty grid tracks.
+- A wrapping `flex-basis` creates one balanced desktop row while allowing two-column mobile rows; an odd final item naturally grows across the remaining row.
+- Keep `min-width: 0` and centered text on each flex item so longer labels shrink safely instead of widening the document.
+
+## Replacing a shared type role safely
+
+- When an unwanted font is supplied through one design token, change the token rather than scattering component overrides. All labels then move together and future utility text inherits the correction automatically.
+- Audit representative computed styles after changing a type token because proportional widths can affect controls, captions, rails, and metadata even when no layout CSS changes.
+- Preserve monospace only where it is structural. Character drawings need fixed cells; interface labels do not.
+
+## Combining modern hierarchy with scrapbook and Y2K detail
+
+- Let hierarchy carry the modern layer and let material treatment carry the scrapbook layer. Large, clean titles and measured copy remain easy to scan while paper texture, offset mounting, and registration shadows add personality around them.
+- Technical decoration feels intentional when it visualizes the nearby discipline. A browser grid, measurement frame, and request topology communicate Frontend, UI/UX, and Backend more clearly than interchangeable stickers or random Y2K symbols.
+- Treat long display words as breakpoint constraints. Check each heading's `scrollWidth` against its content width at desktop, tablet, and phone sizes; a character-based `max-width` can cause local text overflow even when the page reports no horizontal overflow.
+- Static inline SVG is a good fit for this kind of ornament: it inherits theme color, compresses with the JavaScript bundle, requires no network request, and can be removed from the accessibility tree when the adjacent text carries all meaning.
+- Alternating offsets need an exit condition. Removing rotation and asymmetric widths on compact screens preserves the scrapbook idea on wide layouts without sacrificing the phone reading column.
+- For a title column containing long unbreakable words, `minmax(min-content, …)` is safer than a fixed minimum: it lets the browser reserve the actual glyph width before distributing remaining space to the description.
+- Test beyond a section's maximum-width threshold. A viewport can keep widening—and fluid type can keep growing—even after its container stops, exposing collisions that do not exist at the nominal desktop breakpoint.
+
+## Preserving section rhythm while simplifying copy
+
+- Removing several heading elements should not automatically collapse the section. Measure the old header at representative breakpoints and transfer that rhythm to an explicit responsive minimum height.
+- A single word can genuinely span a container without stretching glyphs by exposing its letters as decorative flex children and keeping one accessible label on their wrapper.
+- Hoist a fixed decorative heading tree to module scope so the visual treatment adds no repeated render work or component state.
+- Once individually wrapped letters should read as one word again, center the group and control spacing with an explicit responsive `gap`; `space-between` couples letter spacing to container width and makes a wordmark feel mechanically stretched.
+- Display scale and section rhythm can be tuned independently. Increasing the glyph size while retaining the measured heading `min-height` creates taller type without pushing the filters or project grid farther down the page.
+- Lowercase glyphs can be materially narrower than their uppercase counterparts even in the same serif face. When the brief forbids looser tracking, derive the display size from the actual heading container and let the letterforms grow instead.
+- Container-query units are more reliable than viewport units for an edge-registered masthead inside a capped paper sheet: the type stops growing when its real content measure stops, even if the exterior viewport continues widening.
+- A long editorial statement can gain mobile presence through both scale and measure. A modest font increase combined with a narrower character width creates intentional vertical rhythm without artificial line breaks in the content.
+- Short filter sets should wrap into visible touch targets instead of becoming horizontal scrollers. A two-column grid with the universal `All` action spanning both columns keeps every option discoverable and preserves a clear hierarchy at 320 px.
+- A single `grid-column: span 2` does not by itself create a convincing featured story when the adjacent compact card still controls the shared row height. Give the feature its own row, then begin the repeating archive below it.
+- Repetition should support scanning, not flatten importance. A portfolio grid benefits from one clearly editorialized proof piece and a quieter, consistent archive; adding more stickers to identical cards does not create hierarchy.
+- Never join CMS records to local presentation data by mutable display copy. A punctuation-only title edit can silently disable local assets and layout fields; use a stable shared ID or slug, then allow the title to change independently.
+- Do not advertise an image format in `<picture>` until the backing transformation service supports it. Sanity currently rejects `fm=avif`; an AVIF-capable browser will still select that first source and surface the HTTP 400 as a broken image instead of falling through to WebP.
+- When removing a grouping heading, promote its remaining child headings if needed so the visual simplification does not leave an avoidable semantic level gap.
+- Empty editorial space is best filled with content-specific structure rather than generic ornament. Repeating the real experience years as an aria-hidden visual register balances the masthead while leaving the ordered timeline as the accessible source of truth.
+- A motion-rich portfolio still needs a hierarchy: one memorable load sequence and one primary scroll-drawing moment feel more intentional than applying the same fade-up to every card, heading, and decoration.
+
+## Building a restrained motion system for a scrapbook portfolio
+
+- A useful filler should explain how the person works. Turning existing role language into a semantic loop adds meaning and visual balance without inventing another biography, metric, or decorative theme.
+- Put motion timing and viewport policy in one small module. Shared easing, reveal thresholds, and stagger rules keep different chapters related while still allowing the hero and timeline to have distinct choreography.
+- Reduced motion needs a content-visibility strategy, not just shorter durations. Returning `initial={false}` prevents viewport-hidden content from flashing or remaining unavailable when motion is disabled.
+- Animate a wrapper when the child already owns a scrapbook rotation or transform. This keeps Framer Motion from replacing the static CSS transform that gives the portrait, capability sheet, or Build Loop its physical character.
+- Replace timeline pseudo-elements with real aria-hidden elements when their line growth and node registration need independent animation; the semantic ordered list and written dates remain the accessible source of truth.
+- Viewport-triggered reveals should use `once: true` and a modest visibility threshold. Replaying every time a user reverses direction makes ordinary scanning feel unstable and turns native scrolling into an animation controller.
+- Validate motion in sampled time slices, then verify the final static composition separately. The page still has to be complete, overflow-free, and readable after the choreography ends.
+
+## Avoiding scroll-time clipping on very long decorative sheets
+
+- A complex percentage-based clip path on an element taller than 8,000–11,000 px is a poor fit for a scrolling document. Even when geometry is correct, the browser may composite or repaint it in tiles and briefly expose the layer beneath.
+- Repeat a small edge primitive instead. A theme-colored pseudo-element with a short repeat-y mask preserves the torn silhouette while keeping the reusable paint unit independent of total document height.
+- Do not fade an entire paper card from opacity zero when its background is part of the page structure. Keep the surface painted and animate a small registration shift—or animate only its contents—so fast scrolling never produces an unexplained hole in the composition.
+- Intersection thresholds that feel reasonable for short text can be visibly late for tall cards. Trigger large scroll-revealed regions slightly before they enter the viewport, then retain `once: true` so reversing direction remains calm.
+
+## Preventing directional viewport-edge flicker
+
+- Diagnose the trigger before changing persistent page decoration. A flash that follows scroll direction and begins immediately after adding reveals is stronger evidence of viewport animation state than of a pre-existing paper edge.
+- Do not attach opacity or transform reveals to large opaque layout surfaces. When those blocks cross the leading edge, a single delayed Intersection Observer update can expose their carrier and read as clipping or flicker.
+- Keep the structural surface static and animate smaller internal details. This preserves the intended choreography without making the page's visual continuity depend on intersection timing.
+- If a small detail should animate on entry, use a generous root margin and `once: true` so it is armed before either viewport edge reaches it and never replays when the user reverses direction.
+- When a user still sees the directional flash, audit every rendered descendant rather than only the large carriers. Several small transformed children inside one chapter can retain enough compositor work to expose the shared background during a fast leading-edge scroll.
+- For long, texture-heavy pages, a static final-state diagram is often a better trade than multiple Intersection Observer animations. Load-only motion can still provide personality without tying raster work to scrolling.
+- A completed load animation can still leave compositing hints behind. Framer Motion's final inline `translateZ(0)`, transform, and clip-path values may keep hero glyphs on separate layers after the visible entrance is over; static markup removes those layers entirely.
+- When a screenshot shows nested rectangular flashes, measure generated pseudo-elements as well as real DOM boxes. Here the otherwise invisible `::after` dimensions matched the complete inter-chapter gap and duplicated the panel texture over the continuous sheet.
+- Let one layer own a transition zone. A dotted-sheet gap is visually intentional and cheaper to paint than stacking a ruled panel continuation over it merely to hide the contrast.

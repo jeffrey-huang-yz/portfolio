@@ -1,6 +1,6 @@
-fullstack_portfolio\frontend_react\.env
-fullstack_portfolio\frontend_react\node_modules
-fullstack_portfolio\backend_sanity\node_modules
-node_modules
-fullstack_portfolio\node_modules
-fullstack_portfolio\frontend_react\node_modules\.cache\default-development
+.env
+.env.*
+!.env.example
+
+node_modules/
+**/node_modules/

@@ -4,6 +4,7 @@ import PaperPanel from './PaperPanel';
 const SectionShell = ({
   id,
   eyebrow,
+  headingVisual,
   title,
   intro,
   className = '',
@@ -16,8 +17,8 @@ const SectionShell = ({
     aria-labelledby={`${id}-title`}
   >
     <PaperPanel pageIndex={pageIndex}>
-      <header className="section-heading">
-        <p className="eyebrow">{eyebrow}</p>
+      <header className={`section-heading${eyebrow || headingVisual ? '' : ' section-heading--without-eyebrow'}`}>
+        {eyebrow ? <p className="eyebrow">{eyebrow}</p> : headingVisual}
         <div>
           <h2 id={`${id}-title`}>{title}</h2>
           {intro ? <p className="section-intro">{intro}</p> : null}

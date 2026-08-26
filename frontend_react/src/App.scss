@@ -269,6 +269,10 @@
   line-height: 0.95;
 }
 
+.section-heading--without-eyebrow > div {
+  grid-column: 2;
+}
+
 .section-intro {
   max-width: 43rem;
   margin: 1.5rem 0 0;
@@ -406,5 +410,9 @@
 
   .section-heading h2 {
     max-width: 12ch;
+  }
+
+  .section-heading--without-eyebrow > div {
+    grid-column: 1;
   }
 }

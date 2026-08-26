@@ -21,7 +21,7 @@
   --shadow: 0 28px 75px rgba(0, 0, 0, 0.2);
   --display-font: "Aptos Display", "Segoe UI Variable Display", "Helvetica Neue", Arial, sans-serif;
   --body-font: "Aptos", "Segoe UI Variable Text", "Segoe UI", Arial, sans-serif;
-  --utility-font: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  --utility-font: var(--body-font);
   --header-height: 4.75rem;
 }
 
