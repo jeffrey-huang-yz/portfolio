@@ -453,3 +453,63 @@
 - A completed load animation can still leave compositing hints behind. Framer Motion's final inline `translateZ(0)`, transform, and clip-path values may keep hero glyphs on separate layers after the visible entrance is over; static markup removes those layers entirely.
 - When a screenshot shows nested rectangular flashes, measure generated pseudo-elements as well as real DOM boxes. Here the otherwise invisible `::after` dimensions matched the complete inter-chapter gap and duplicated the panel texture over the continuous sheet.
 - Let one layer own a transition zone. A dotted-sheet gap is visually intentional and cheaper to paint than stacking a ruled panel continuation over it merely to hide the contrast.
+
+## Isolating scroll-linked SVG repaint cost
+
+- A passive scroll listener is not automatically cheap: a MotionValue connected to an SVG presentation attribute can still cause a paint on every animation frame without a React component re-render.
+- When the SVG spans an entire long document, animate or reveal it only after proving the layer can remain composited; a changing internal clip can invalidate much larger raster regions than the visible stroke suggests.
+- Change one scroll-time compositor variable at a time. Keeping the rail, blur, textures, and torn edges fixed makes a real-browser result attributable to the route rather than to a bundle of speculative optimizations.
+- A MutationObserver is a useful structural check for direct SVG attribute writes during synthetic rapid scrolling, but a real-browser visual test remains necessary for GPU checkerboarding and display-specific tearing.
+- A fixed translucent `backdrop-filter` makes the browser continually resample whatever textured surfaces cross beneath it. On a long raster-heavy page, an opaque theme token removes that live dependency while preserving the same navigation hierarchy and light/dark contrast.
+- Isolation results outrank plausible theory: removing the navbar blur produced no visible change in the target browser, so restore the intended design instead of keeping an ineffective simplification.
+- Frame-frequency values that do not affect application composition belong in refs rather than React state. Updating a native range and a handful of local attributes avoids reconciling the entire rail component while keeping its accessible live feedback intact.
+- Do not retain a ref-based optimization merely because it is theoretically cleaner when the target visual artifact is unchanged; restore the simpler implementation and move down the paint pipeline.
+- Offscreen hiding is not a universal cure for scrollbar-jump checkerboarding. Observer-driven visibility can lag large native scroll jumps, and `content-visibility` may either show intrinsic placeholders or be defeated by geometry reads from a document-wide route.
+- A stacking context spanning nearly 9,000 px with a large blurred shadow is a more direct raster target than offscreen semantic content. Flatten the large structural carrier first, retain a cheap hard offset for the scrapbook aesthetic, and keep panels rendered normally until evidence points at them.
+
+## Diagnosing checkerboarding beyond the layer that flashes
+
+- The layer visible in a checkerboard is not necessarily the layer causing raster starvation. Here the continuous paper flashed after image decode/paint work in the earlier Work chapter saturated the compositor.
+- Use fresh browser processes for cold-tile comparisons. Sequential variants in one process inherit Chrome's tile, glyph, and decoded-image caches and can make the second architecture look much cheaper regardless of its design.
+- Split main-thread Paint from renderer raster and GPU flush. Low Paint time alongside high raster/flush time is evidence against React rerenders and layout computation as the primary bottleneck.
+- In a `<picture>`, responsive candidate selection is controlled by the chosen `<source>`. Put `sizes` on every AVIF/WebP source; an `img[sizes]` value does not correct a source that defaults to `100vw`.
+- Verify the browser's actual `currentSrc` at DPR 1 and DPR 2. A correct `srcset` can still overdecode every card when its layout hint is missing or when compact and featured media share one exaggerated size.
+- `content-visibility:auto` is safest on a fixed-geometry media viewport, not an entire route-measured section. An explicit aspect ratio preserves document height while allowing the expensive descendant image paint to be skipped offscreen.
+- Decode-ahead can reduce scroll-time work, but it transfers cost to startup. Correct candidate dimensions and localized paint culling should come first for a portfolio whose initial load must remain fast.
+- Compare native scrollbar dragging with a JavaScript-driven range before blaming scroll listeners. A native thumb may move the compositor ahead of raster work, while an `onChange` → `scrollTo` control is naturally gated by main-thread event delivery and can appear clean on the same document.
+- Do not migrate routers or server-state libraries to solve a raster bottleneck. If the rendered DOM and CSS remain the same, the compositor receives essentially the same paint workload; optimize pixels, paint boundaries, and decode timing first.
+
+## Restoring motion without restoring structural flicker
+
+- Reintroduce animation at the smallest meaningful layer. Moving a diagram, timeline rule, label, or text group preserves the continuous paper beneath it; fading or translating the complete paper carrier creates a visible structural hole.
+- Scroll-entry content should arm before it reaches the viewport edge and run only once. A generous positive viewport margin avoids observer-late reveals during fast scrolling and keeps reverse navigation calm.
+- Decorative timeline rules and nodes can animate while the associated article text stays fully painted. This preserves information availability and materially limits the animated raster area.
+- Verify that completed transforms become `none`, not merely an identity matrix retained with compositor hints. The restored hero and Experience details release their transform after settling.
+- A reduced-motion check should inspect computed styles, not only configuration. The safe outcome is immediate opacity 1 and transform none for every tested reveal.
+
+## Simplifying decoration and efficiently drawing a long SVG route
+
+- Remove rejected decoration at the source instead of hiding it. Deleting its component, motion setup, local data, and responsive CSS reduces both maintenance and compiled styling while keeping the semantic content unambiguous.
+- A shared navigation record should own chapter wording. Changing one label updates the desktop menu, mobile menu, and progress rail while a stable section ID preserves anchors and measurement code.
+- Normalize an SVG route with `pathLength="1"`. Progress then becomes a single bounded `strokeDashoffset` write, with no `getTotalLength()` call and no dependence on the route's responsive geometry.
+- Cache document-relative start/end metrics during initial layout and resize. A scroll frame should read `scrollY`, do scalar arithmetic, and write one style—not call `getBoundingClientRect()` or update React state.
+- Coalesce passive scroll events with `requestAnimationFrame`, skip imperceptibly small deltas, and render the completed stroke for reduced-motion users.
+- Superseded by target-device evidence: even one direct dash-offset write per frame can re-raster a document-height SVG and dramatically worsen checkerboarding. For this portfolio, the only verified-safe route is a completed stroke with zero scroll-time SVG mutation.
+
+## Drawing a long route without invalidating a long document
+
+- Bound an animated paint surface to the pixels the user can currently see. A fixed viewport canvas avoids allocating or invalidating an 8,000–11,000 px drawing surface while preserving the document-height SVG as immutable geometry and fallback.
+- Cache geometry in the coordinate system used for painting. Converting the responsive SVG route into one paper-scaled `Path2D` means each scroll frame can stroke ordinary CSS-pixel coordinates without rebuilding commands or scaling the line width.
+- A fast scroll handler is defined as much by what it does not do as what it does: no React state, bounding boxes, DOM queries, computed styles, ResizeObserver work, or SVG writes belong in the frame callback. Cache those during actual geometry changes.
+- Reveal a monotonic route by clipping the viewport canvas to a paper-relative height. The full cached path can be translated by the cached paper offset and stroked once; the viewport clip discards the unrevealed and offscreen portions without mutating route geometry.
+- A progressive renderer needs a first-frame handshake. Keep the completed static route visible until context creation, path conversion, sizing, and the first stroke all succeed; only then switch visibility. Any failure should restore the known-good visual immediately.
+- Treat reduced motion, print, unsupported APIs, tab visibility, and context loss as renderer lifecycle states. They should remove the scroll listener and expose semantic/static content rather than merely hiding a failed canvas.
+- Synthetic scroll checks can prove backing-store limits and zero SVG mutations, but the target Windows browser's native-scrollbar drag remains the acceptance gate for display-level checkerboarding.
+
+## Reusing the bounded-work principle elsewhere
+
+- Reuse the principle, not necessarily Canvas itself: constrain live work to the smallest changing surface, cache stable inputs, and keep a cheap static first paint.
+- Pixel treatments that never change should be performed before runtime. Pre-baked or CDN-generated monochrome project images can remove a filter from the browser's scroll-time raster path.
+- A bundled local snapshot makes CMS enhancement deferrable. Load remote content after first paint—or use a small direct CDN request—so a public SDK and its transport dependencies do not compete with the initial portfolio render.
+- Frame-frequency UI feedback such as a progress range can live in refs and local DOM properties, but measured target-device evidence should decide whether the extra imperative code is worth retaining.
+- Do not generalize one successful Canvas overlay into a Canvas-rendered site. Text, links, articles, and section structure are already best served by semantic DOM; Canvas is justified only for the one continuous decorative stroke whose SVG invalidation was proven expensive.

@@ -650,3 +650,106 @@
 - Removed those generated Home/Profile/Work/Skills continuations and restored the original section and Contact margins. The gaps now show only the single dotted continuous sheet.
 - Responsive Chromium checks confirm the duplicate carrier is absent, the intended gaps remain 192 px on desktop and 88 px on mobile, horizontal overflow is zero, visible images load, and the console is clean.
 - Production compilation succeeds at 112.93 kB JavaScript and 8.98 kB CSS gzip; the empty test suite and diff whitespace validation pass.
+
+## 2026-08-26 · Scroll flicker isolation — iteration 1
+
+- Created local rollback checkpoint `6e0265bc7af04f754e09b5d8e4e49be76be4e3ff` on `main`; nothing was pushed.
+- Corrected the repository ignore rules and stopped tracking `frontend_react/.env` while preserving the local file.
+- Removed only the route's Framer Motion scroll subscription and animated document-height SVG clip; the dotted guide, completed solid route, route geometry, rail, navbar blur, textures, and torn edges remain.
+- Production build succeeds at 110.38 kB JavaScript and 8.98 kB CSS gzip; the empty test suite passes.
+- Rapid 25-stop scroll checks at 1440×1000 and 390×844 confirm zero route DOM mutations, zero horizontal overflow, no broken rendered images, and exact document-end reach. Remote Sanity requests are blocked by the sandbox and are the only console errors.
+- Awaiting a fast-scroll check in the user's normal browser before changing the next independent compositor variable.
+
+## 2026-08-26 · Scroll flicker isolation — iteration 2
+
+- The user's real-browser test confirmed iteration 1 reduced the flicker, but occasional tearing remains and is most visible during rapid native-scrollbar dragging.
+- Removed the fixed navbar's 18 px `backdrop-filter` and replaced its translucent chrome surface with the existing opaque theme-aware chrome token.
+- Kept the static-route isolation, progress rail, continuous sheet, panel textures, shadows, and torn edges unchanged so the next result remains attributable.
+- Chromium at 1440×1000 and 390×844 confirms opaque light/dark header colors, no backdrop filter, exact fixed registration, and zero horizontal overflow through 25 rapid scroll jumps.
+- Production build succeeds at 110.38 kB JavaScript and 8.95 kB CSS gzip; the empty test suite passes.
+
+## 2026-08-26 · Scroll flicker isolation — iteration 3
+
+- The user's real-browser test found no improvement from the opaque navbar experiment, so the original translucent surface and 18 px backdrop blur were restored exactly.
+- Removed the progress rail's frame-frequency React `progress` state. Scroll progress now lives in a ref and updates only the native range value, its local CSS variable, rounded output/ARIA text, and the one station beneath the thumb.
+- Retained native range dragging, keyboard Home/End, direct station navigation, active labels, mobile label pinning/dismissal, and resize-based station measurement.
+- Desktop/mobile Chromium confirms exact endpoints, synchronized progress output, one overlapped station, Work alignment within 0.1%, zero overflow, and no unexpected console errors.
+- Production build succeeds at 110.66 kB JavaScript and 8.98 kB CSS gzip; the empty test suite passes.
+
+## 2026-08-26 · Scroll flicker isolation — iteration 4
+
+- The user's real-browser test found no visual improvement from removing the rail's frame-frequency React state, so JourneyRail and the already-ruled-out navbar were restored from checkpoint; the beneficial static route remains.
+- Rejected late Intersection Observer visibility toggles and whole-panel `content-visibility`: rapid scrollbar jumps can expose skipped placeholders, while PaperJourney geometry reads can force the skipped sections to render anyway.
+- Measured the remaining paint surfaces: the continuous sheet and route are about 8,680 px tall on desktop, and the sheet was isolated with a 75 px blurred shadow; chapter panels reach 2,831 px with 48 px blurs.
+- Flattened only the continuous sheet by removing forced isolation, using `overflow: clip` instead of scroll-container-producing `hidden`, and replacing the 75 px blur with a small hard scrapbook offset.
+- Production build succeeds at 110.38 kB JavaScript and 8.98 kB CSS gzip; the empty test suite passes.
+
+## 2026-08-26 · Deep compositor diagnosis and responsive-media fix
+
+- Restored iteration 4's sheet isolation, overflow, texture, torn edges, and shadow after the user confirmed that flattening the paper carrier did not change the artifact.
+- Profiled rapid scrollbar-style jumps with Chrome tracing in a fresh browser process per variant. Representative baseline work was compositor-bound at roughly 390 ms renderer raster / 298 ms GPU flush versus roughly 7 ms main-thread Paint.
+- Ruled out the route, torn edges, sheet texture, panel texture, fixed navigation, grayscale filter, and hover transform as dominant individual causes.
+- Traced the dominant burst to the Work media path: the AVIF/WebP `<source>` elements had no `sizes`, so Chrome treated each as `100vw` and selected the 1200 px candidate for every one of the nine cards at DPR 1.
+- Added source-level responsive hints, separate featured/compact sizing, and an 800 px cap for compact project candidates. DPR 1 now selects one 800 px feature plus 480 px compact assets; DPR 2 uses one 1200 px feature plus 800 px compact assets.
+- Moved each media aspect ratio to its containing viewport and applied `content-visibility:auto` only there. Chrome can omit offscreen image paint while the explicit 16:8/16:11 geometry keeps card, document, stamp, and SVG-route measurements stable.
+- Rejected a 15-slice SVG route experiment after reverse-order cold-cache tracing showed no first-traversal gain; removed all diagnostic code and retained the user's previously beneficial static-route change only.
+- Responsive Chromium QA at 1440×1000, 390×844, and 320×568 reports stable document height, zero route mutations during rapid traversal, zero horizontal overflow, zero broken local images, and correctly selected AVIF candidates.
+- Production build succeeds at 110.43 kB JavaScript and 9.00 kB CSS gzip. The changes remain uncommitted against checkpoint `6e0265bc7af04f754e09b5d8e4e49be76be4e3ff`; nothing was pushed.
+
+## 2026-08-26 · TanStack performance assessment
+
+- Confirmed that TanStack Query, Router, and Start solve server-state, routing, and server-rendering concerns rather than the current compositor checkerboarding.
+- Rejected TanStack Virtual for the five-chapter document because removing semantic chapters from the DOM would complicate native anchors, measured route stamps, progress stations, browser find, and accessibility without addressing the per-viewport paper paint directly.
+- Recommended staying on the current React stack and prioritizing scroll-aware idle image warmup, pre-baked monochrome assets/textures, and measured paint containment if another optimization iteration is approved.
+- No application source or dependency changed during this assessment.
+
+## 2026-08-26 · Performance-safe motion restoration
+
+- Restored a coordinated hero-load sequence across Jeffrey/Huang, the ASCII portrait, and the two point columns; every element settles to ordinary opacity 1 / transform none.
+- Restored Profile motion only on the small technical schematics and individual Interest labels, leaving capability sheets and the chapter paper continuously painted.
+- Restored the Experiences year-register draw, Build Loop connector/nodes, and timeline rules/nodes/years while keeping all experience article text static and readable throughout.
+- Restored Contact entrance motion on its text, detail register, and footer, without animating the borderless Contact paper carrier.
+- Kept the document-height SVG route static and complete, retained the existing Work filter transition, and added no wheel listener, scroll interception, dependency, or layout animation.
+- All viewport motion runs once, triggers with a generous preload margin, and renders immediately in its final state under `prefers-reduced-motion: reduce`.
+- Headless Chromium confirms visible early/final animation states, unchanged desktop document height, zero route mutations during rapid jumps, zero overflow, zero broken images, and no unexpected console errors. Desktop and reduced-motion mobile screenshots preserve the final composition.
+- Production build succeeds at 110.79 kB JavaScript and 9.00 kB CSS gzip; the empty test suite and `git diff --check` pass.
+
+## 2026-08-27 · Experiences simplification and efficient route reveal
+
+- Removed the Build Loop card and the decorative year-register timeline from the Experiences chapter at the component level, then deleted their unused data, motion markup, and responsive SCSS.
+- Preserved the full Skills list and chronological experience timeline, including its lightweight line/node/year entry motion.
+- Renamed the shared `Toolkit` navigation label to `Experiences`, updating the desktop/mobile navbar and fixed progress rail without changing the stable `#skills` anchor.
+- Restored the solid scrapbook route as a normalized SVG dash reveal. Scroll input is passive and coalesced to one animation frame; the callback writes directly to the path and performs no React state update or layout measurement.
+- Route geometry and scroll bounds are measured only during initial layout or resize. `prefers-reduced-motion` renders the complete route immediately.
+- Chromium QA at 1440×1000 and 390×844 confirms the removed graphics are absent, all 19 skills and five experience articles remain, the guide and progress paths match, the route advances monotonically to completion, and there is no horizontal overflow or broken local image.
+- Production build succeeds at 110.61 kB JavaScript and 8.48 kB CSS gzip; the empty test suite passes.
+
+## 2026-08-27 · Scroll-linked route reveal rollback
+
+- The user's target Windows browser showed dramatically worse flicker with the normalized `strokeDashoffset` route reveal, so the experiment was fully removed.
+- Restored PaperJourney to its previously stable behavior: route geometry updates only after initial layout or resize, while the dotted guide and completed solid path remain unchanged throughout scrolling.
+- Removed the passive scroll listener, animation-frame progress callback, path-length normalization, dash-offset styling, and route-specific reduced-motion override.
+- Preserved the independent Experiences changes: its Build Loop and heading year register remain removed, and the navbar/progress rail still use the Experiences label.
+- Rapid six-stop Chromium checks at 1440×1000 and 390×844 report zero SVG route mutations, stable document heights, and zero horizontal overflow.
+- Production build succeeds at 110.36 kB JavaScript and 8.45 kB CSS gzip; the empty test suite and `git diff --check` pass.
+
+## 2026-08-27 · Viewport-bounded Canvas route
+
+- Replaced the scroll-mutated, document-height SVG reveal with a fixed Canvas 2D surface that is never taller than the current viewport. The dotted SVG guide remains static, and the completed solid SVG remains immediately available as the fallback.
+- Preserved the existing responsive waypoint measurement, numbered-stamp registration, mobile Contact tail, native scrolling, and 64%-viewport lead timing. The route advances and retracts directly with document progress.
+- Cached one paper-scaled `Path2D` after geometry changes. Scroll input is passive and requestAnimationFrame-coalesced; a scroll frame reads only cached metrics plus `scrollY`, then clears, clips, translates, and strokes once without React state, DOM queries, style reads, layout measurement, or SVG mutation.
+- Capped the backing store at DPR 2 and requested the alpha Canvas 2D context with `willReadFrequently:false`. Added an internal `ENABLE_CANVAS_ROUTE` rollback flag.
+- Kept the completed SVG visible until the first canvas draw succeeds. Reduced motion, print, missing Canvas/Path2D support, initialization failure, and context loss all stop the canvas listener and restore the static route; visibility changes pause and resume drawing safely.
+- Added four unit tests covering clamping, the 64% start, exact Contact completion, and upward retraction.
+- Browser-tested 1440×1000, 1280×720, 1024×768, 820×1180, 390×844, and 320×568 at DPR 1 and 2. Every case kept the canvas at paper-width × viewport-height, preserved document height, shared the SVG geometry, produced zero long-SVG mutations, had zero overflow/broken local images, and reported canvas stroke p95 at 0–0.1 ms.
+- Verified print, reduced-motion, missing-context, missing-Path2D, and synthetic context-loss fallbacks; progress-rail scrubbing, keyboard control, station links/alignment, mobile station labels, theme cycling, and native wheel scrolling also pass.
+- Two fresh-process traces favored Canvas over the static solid route: 95.66 ms vs 134.20 ms raster and 893.57 ms vs 1161.81 ms GPU flush, with 40 vs 54 dropped-frame trace events in the representative run.
+- Production build succeeds at 111.40 kB JavaScript and 8.54 kB CSS gzip, a +1.04 kB JavaScript increase over the 110.36 kB static baseline. Changes remain uncommitted for the user's Windows native-scrollbar acceptance test; nothing was pushed.
+
+## 2026-08-27 · Follow-up efficiency audit
+
+- Audited the remaining scroll listeners, viewport motion, CMS loading, image treatment, and compiled source-map composition without changing application source.
+- The strongest remaining scroll-performance candidate is removing the runtime `grayscale(1) contrast(1.03)` filter from project media and baking that treatment into local optimized assets or Sanity CDN URLs. Prior tracing already identified Work media as the dominant raster burst.
+- The strongest initial-load candidates are deferring or replacing the Sanity SDK path and slimming Framer Motion. The production source map contains about 368 KiB of Framer Motion source plus a Sanity path comprising about 126 KiB `@sanity/client`, 66 KiB RxJS, 30 KiB get-it, and 16 KiB `@sanity/image-url` before minification.
+- The Canvas pattern could also move JourneyRail progress from frame-frequency React state to refs/direct local DOM updates, but this exact isolation was previously tested and did not improve the target flicker. Treat it as a small CPU cleanup, not the next visual fix.
+- Keep chapter DOM, route-measured layouts, native scrolling, and the existing media-only `content-visibility` boundary. Do not apply Canvas, virtualization, or `will-change` broadly.

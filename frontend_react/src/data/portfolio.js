@@ -7,7 +7,7 @@ export const navItems = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'Profile' },
   { id: 'work', label: 'Work' },
-  { id: 'skills', label: 'Toolkit' },
+  { id: 'skills', label: 'Experiences' },
   { id: 'contact', label: 'Contact' },
 ];
 

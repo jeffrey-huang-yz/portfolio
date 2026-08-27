@@ -88,6 +88,36 @@
   opacity: 0.86;
 }
 
+.paper-route-canvas {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  display: block;
+  max-width: none;
+  background: transparent;
+  pointer-events: none;
+  visibility: hidden;
+  contain: strict;
+}
+
+.paper-journey[data-route-canvas='ready'] .paper-route-canvas {
+  visibility: visible;
+}
+
+.paper-journey[data-route-canvas='ready'] .paper-route__progress {
+  visibility: hidden;
+}
+
+@media print, (prefers-reduced-motion: reduce) {
+  .paper-route-canvas {
+    display: none !important;
+  }
+
+  .paper-route__progress {
+    visibility: visible !important;
+  }
+}
+
 .paper-panel {
   position: relative;
   isolation: isolate;

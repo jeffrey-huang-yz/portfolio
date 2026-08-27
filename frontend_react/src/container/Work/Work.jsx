@@ -13,21 +13,24 @@ const projectsHeading = (
   </span>
 );
 
-const responsiveSizes = '(max-width: 720px) 92vw, (max-width: 1080px) 46vw, 31vw';
-const localSrcSet = (slug, extension) => [480, 800, 1200]
+const featuredSizes = '(max-width: 620px) 92vw, (max-width: 980px) 86vw, 55vw';
+const compactSizes = '(max-width: 620px) 92vw, (max-width: 980px) 46vw, 31vw';
+const featuredWidths = [480, 800, 1200];
+const compactWidths = [480, 800];
+const localSrcSet = (slug, extension, widths) => widths
   .map((width) => `/project-images/${slug}-${width}.${extension} ${width}w`)
   .join(', ');
 
-const ProjectImage = ({ project }) => {
+const ProjectImage = ({ project, sizes, widths }) => {
   if (project.imageSlug) {
     return (
       <picture>
-        <source type="image/avif" srcSet={localSrcSet(project.imageSlug, 'avif')} />
-        <source type="image/webp" srcSet={localSrcSet(project.imageSlug, 'webp')} />
+        <source type="image/avif" srcSet={localSrcSet(project.imageSlug, 'avif', widths)} sizes={sizes} />
+        <source type="image/webp" srcSet={localSrcSet(project.imageSlug, 'webp', widths)} sizes={sizes} />
         <img
           src={`/project-images/${project.imageSlug}-800.jpg`}
-          srcSet={localSrcSet(project.imageSlug, 'jpg')}
-          sizes={responsiveSizes}
+          srcSet={localSrcSet(project.imageSlug, 'jpg', widths)}
+          sizes={sizes}
           width="800"
           height="560"
           loading="lazy"
@@ -40,12 +43,12 @@ const ProjectImage = ({ project }) => {
 
   return (
     <picture>
-      <source type="image/avif" srcSet={getImageSrcSet(project.imgUrl, 'avif')} />
-      <source type="image/webp" srcSet={getImageSrcSet(project.imgUrl, 'webp')} />
+      <source type="image/avif" srcSet={getImageSrcSet(project.imgUrl, 'avif', widths)} sizes={sizes} />
+      <source type="image/webp" srcSet={getImageSrcSet(project.imgUrl, 'webp', widths)} sizes={sizes} />
       <img
         src={getImageUrl(project.imgUrl, 800)}
-        srcSet={getImageSrcSet(project.imgUrl)}
-        sizes={responsiveSizes}
+        srcSet={getImageSrcSet(project.imgUrl, undefined, widths)}
+        sizes={sizes}
         width="800"
         height="560"
         loading="lazy"
@@ -96,14 +99,18 @@ const Work = ({ works }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22 }}
       >
-        {filteredWorks.map((work) => (
+        {filteredWorks.map((work, index) => (
           <div
             className="project-card-reveal"
             key={work._id || work.title}
           >
             <article className="project-card">
               <div className="project-card__media">
-                <ProjectImage project={work} />
+                <ProjectImage
+                  project={work}
+                  sizes={index === 0 ? featuredSizes : compactSizes}
+                  widths={index === 0 ? featuredWidths : compactWidths}
+                />
                 <ul className="project-card__tags" aria-label={`${work.title} categories`}>
                   {work.tags?.filter((tag) => tag !== 'All').map((tag) => <li key={tag}>{tag}</li>)}
                 </ul>

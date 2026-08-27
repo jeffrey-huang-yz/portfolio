@@ -22,10 +22,10 @@ export const getImageUrl = (source, width = 800, format) => {
   return image.url();
 };
 
-export const getImageSrcSet = (source, format) => {
+export const getImageSrcSet = (source, format, widths = imageWidths) => {
   if (!source) return '';
 
-  return imageWidths
+  return widths
     .map((width) => `${getImageUrl(source, width, format)} ${width}w`)
     .join(', ');
 };

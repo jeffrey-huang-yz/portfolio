@@ -97,8 +97,11 @@
 .project-card__media {
   position: relative;
   overflow: hidden;
+  aspect-ratio: 16 / 11;
   border-bottom: 1px solid var(--line);
   background: var(--paper-muted);
+  contain-intrinsic-size: auto 300px;
+  content-visibility: auto;
 }
 
 .project-card__media picture,
@@ -108,10 +111,10 @@
 }
 
 .project-card__media picture {
-  aspect-ratio: 16 / 11;
+  display: block;
 }
 
-.work-grid > .project-card-reveal:first-child .project-card__media picture {
+.work-grid > .project-card-reveal:first-child .project-card__media {
   aspect-ratio: 16 / 8;
 }
 
@@ -216,7 +219,7 @@
     grid-column: auto;
   }
 
-  .work-grid > .project-card-reveal:first-child .project-card__media picture {
+  .work-grid > .project-card-reveal:first-child .project-card__media {
     aspect-ratio: 16 / 11;
   }
 }
