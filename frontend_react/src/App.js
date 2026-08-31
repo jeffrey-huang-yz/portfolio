@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MotionConfig } from 'framer-motion';
+import { domAnimation, LazyMotion, MotionConfig } from 'framer-motion';
 import { About, Footer, Header, Skills, Work } from './container';
 import { JourneyRail, Navbar, PaperJourney } from './component';
 import { navItems } from './data/portfolio';
@@ -30,22 +30,24 @@ const App = () => {
   }, []);
 
   return (
-    <MotionConfig reducedMotion="user">
-      <div className="app">
-        <a className="skip-link" href="#main-content">Skip to main content</a>
-        <Navbar activeSection={activeSection} />
-        <JourneyRail activeSection={activeSection} />
-        <main id="main-content">
-          <PaperJourney>
-            <Header />
-            <About abouts={portfolio.abouts} />
-            <Work works={portfolio.works} />
-            <Skills skills={portfolio.skills} experiences={portfolio.experiences} />
-            <Footer />
-          </PaperJourney>
-        </main>
-      </div>
-    </MotionConfig>
+    <LazyMotion features={domAnimation} strict>
+      <MotionConfig reducedMotion="user">
+        <div className="app">
+          <a className="skip-link" href="#main-content">Skip to main content</a>
+          <Navbar activeSection={activeSection} />
+          <JourneyRail activeSection={activeSection} />
+          <main id="main-content">
+            <PaperJourney>
+              <Header />
+              <About abouts={portfolio.abouts} />
+              <Work works={portfolio.works} />
+              <Skills skills={portfolio.skills} experiences={portfolio.experiences} />
+              <Footer />
+            </PaperJourney>
+          </main>
+        </div>
+      </MotionConfig>
+    </LazyMotion>
   );
 };
 

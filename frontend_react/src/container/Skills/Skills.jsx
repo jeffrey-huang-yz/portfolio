@@ -1,24 +1,24 @@
 import React, { useMemo } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { SectionShell } from '../../component';
 import './Skills.scss';
 
-const detailViewport = { once: true, amount: 0.12, margin: '180px 0px 140px 0px' };
+const detailViewport = { once: true, amount: 0.25, margin: '0px 0px -16% 0px' };
 const timelineSequence = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.07 } },
+  visible: { transition: { staggerChildren: 0.09 } },
 };
 const timelineLine = {
   hidden: { scaleY: 0 },
-  visible: { scaleY: 1, transition: { duration: 0.52, ease: [0.22, 1, 0.36, 1] } },
+  visible: { scaleY: 1, transition: { duration: 0.68, ease: [0.22, 1, 0.36, 1] } },
 };
 const timelineDot = {
   hidden: { opacity: 0, scale: 0.3 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] } },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] } },
 };
 const timelineYear = {
-  hidden: { opacity: 0, x: -7 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.38, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, x: -11 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
 };
 
 const Skills = ({ experiences, skills }) => {
@@ -47,26 +47,26 @@ const Skills = ({ experiences, skills }) => {
         <div className="experience-trail">
           <ol>
             {sortedExperience.map((experience) => (
-              <motion.li
+              <m.li
                 key={experience._id || experience.year}
                 variants={timelineSequence}
                 initial={reduceMotion ? false : 'hidden'}
                 whileInView="visible"
                 viewport={detailViewport}
               >
-                <motion.span
+                <m.span
                   className="experience-trail__line"
                   aria-hidden="true"
                   variants={timelineLine}
                 />
-                <motion.span
+                <m.span
                   className="experience-trail__dot"
                   aria-hidden="true"
                   variants={timelineDot}
                 />
-                <motion.time variants={timelineYear} dateTime={experience.year}>
+                <m.time variants={timelineYear} dateTime={experience.year}>
                   {experience.year}
-                </motion.time>
+                </m.time>
                 <div>
                   {experience.works?.map((work) => (
                     <article key={work._key || `${experience.year}-${work.name}`}>
@@ -76,7 +76,7 @@ const Skills = ({ experiences, skills }) => {
                     </article>
                   ))}
                 </div>
-              </motion.li>
+              </m.li>
             ))}
           </ol>
         </div>

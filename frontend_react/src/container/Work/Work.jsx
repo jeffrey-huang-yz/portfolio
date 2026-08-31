@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { getImageSrcSet, getImageUrl } from '../../client';
+import { m, useReducedMotion } from 'framer-motion';
+import { getImageSrcSet, getImageUrl } from '../../imageUrls';
 import { SectionShell } from '../../component';
 import './Work.scss';
 
@@ -92,7 +92,7 @@ const Work = ({ works }) => {
         {filteredWorks.length} {filteredWorks.length === 1 ? 'project' : 'projects'} shown
       </p>
 
-      <motion.div
+      <m.div
         key={activeFilter}
         className="work-grid"
         initial={reduceMotion ? false : { opacity: 0, y: 10 }}
@@ -134,7 +134,7 @@ const Work = ({ works }) => {
             </article>
           </div>
         ))}
-      </motion.div>
+      </m.div>
     </SectionShell>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import asciiPortraitUrl from '../../assets/profile-ascii.txt';
 import { PaperPanel } from '../../component';
 import './Header.scss';
@@ -74,44 +74,43 @@ const Header = () => {
   return (
     <section id="home" className="hero-section" aria-labelledby="hero-title">
       <PaperPanel className="hero-scrap" pageIndex={0}>
-        <motion.div
+        <m.div
           className="hero-composition"
           variants={heroSequence}
           initial={reduceMotion ? false : 'hidden'}
           animate="visible"
         >
-          <motion.div className="hero-masthead" variants={heroSequence}>
-            <motion.h1 id="hero-title" variants={heroSequence}>
-              <motion.span className="hero-masthead__first-name" variants={heroRise}>
+          <m.div className="hero-masthead" variants={heroSequence}>
+            <m.h1 id="hero-title" variants={heroSequence}>
+              <m.span className="hero-masthead__first-name" variants={heroRise}>
                 Jeffrey
-              </motion.span>
-              <motion.em className="hero-masthead__last-name" variants={heroRise}>
+              </m.span>
+              <m.em className="hero-masthead__last-name" variants={heroRise}>
                 Huang
-              </motion.em>
-            </motion.h1>
+              </m.em>
+            </m.h1>
 
-            <motion.div className="hero-ascii-reveal" variants={portraitRegister}>
+            <m.div className="hero-ascii-reveal" variants={portraitRegister}>
               <figure className="hero-ascii" aria-label="ASCII portrait of Jeffrey Huang">
                 <div className="hero-ascii__viewport">
                   <pre aria-hidden="true">{asciiPortrait}</pre>
                 </div>
-                <figcaption>self portrait / 119 × 73 characters</figcaption>
               </figure>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             className="hero-points"
             aria-label="Profile summary"
             variants={heroSequence}
           >
             {heroPointColumns.map(({ label, points }) => (
-              <motion.ul key={label} aria-label={label} variants={heroRise}>
+              <m.ul key={label} aria-label={label} variants={heroRise}>
                 {points.map((point) => <li key={point}>{point}</li>)}
-              </motion.ul>
+              </m.ul>
             ))}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </PaperPanel>
     </section>
   );

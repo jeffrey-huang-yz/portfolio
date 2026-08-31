@@ -15,13 +15,74 @@
 }
 
 .contact-section .paper-panel__content {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(17rem, 0.65fr);
   gap: clamp(2rem, 7vw, 7rem);
 }
 
+.contact-section .paper-panel__content::before {
+  position: absolute;
+  z-index: 0;
+  inset: calc(clamp(1.25rem, 3.4vw, 2.75rem) * -1);
+  border: 1px solid color-mix(in srgb, var(--ink) 72%, transparent);
+  background: var(--paper-elevated);
+  box-shadow: 0.45rem 0.55rem 0 color-mix(in srgb, var(--ink) 12%, transparent);
+  content: '';
+  pointer-events: none;
+}
+
+.contact-section .paper-panel__content::after {
+  position: absolute;
+  z-index: 2;
+  top: -1.45rem;
+  right: -1.4rem;
+  display: grid;
+  width: clamp(3.75rem, 6vw, 5rem);
+  aspect-ratio: 0.82;
+  place-items: center;
+  border: 0.3rem dotted var(--paper-elevated);
+  outline: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper-elevated);
+  content: 'JH\A 05 · CA';
+  font-family: var(--utility-font);
+  font-size: clamp(0.48rem, 0.8vw, 0.62rem);
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-align: center;
+  white-space: pre;
+  pointer-events: none;
+}
+
+.contact-section__stamp {
+  display: none;
+}
+
 .contact-section__main {
   position: relative;
+  z-index: 1;
+}
+
+.contact-section__main::before {
+  position: absolute;
+  z-index: 0;
+  top: clamp(2.8rem, 7vw, 5.25rem);
+  right: clamp(-1.2rem, -1.8vw, -0.4rem);
+  width: clamp(6rem, 13vw, 10rem);
+  height: 3.5rem;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 0.46rem,
+    var(--ink) 0.46rem 0.52rem
+  );
+  content: '';
+  opacity: 0.16;
+  transform: rotate(-7deg);
+  transform-origin: center;
+  pointer-events: none;
 }
 
 .contact-section__main::after {
@@ -43,7 +104,7 @@
   z-index: 1;
   max-width: 11ch;
   margin: 1rem 0 1.5rem;
-  font-family: var(--display-font);
+  font-family: 'Times New Roman', Times, serif;
   font-size: clamp(2.8rem, 6vw, 6rem);
   font-weight: 740;
   letter-spacing: -0.065em;
@@ -72,15 +133,29 @@
   z-index: 1;
   align-self: end;
   padding: 1.5rem;
-  border: 1px solid var(--ink);
+  border: 1px solid transparent;
+  border-left-color: var(--ink);
   background: transparent;
 }
 
 .contact-section address {
+  position: relative;
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 0.45rem 1.25rem;
   font-style: normal;
+}
+
+.contact-section address::after {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.55rem);
+  color: var(--ink-soft);
+  content: '·  ·  ·  ·  ·  ·';
+  font-family: var(--utility-font);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  pointer-events: none;
 }
 
 .contact-section address span {
@@ -94,6 +169,7 @@
 
 .contact-section address p {
   margin: 0;
+  box-shadow: inset 0 -1px 0 var(--line);
 }
 
 .contact-section__details nav {
@@ -112,6 +188,8 @@
 }
 
 .contact-section__foot {
+  position: relative;
+  z-index: 1;
   grid-column: 1 / -1;
   display: flex;
   justify-content: space-between;
@@ -143,9 +221,47 @@
     grid-column: auto;
   }
 
+  .contact-section__details {
+    border-top-color: var(--ink);
+    border-left-color: transparent;
+  }
+
+  .contact-section .paper-panel__content::before {
+    background: var(--paper-elevated);
+  }
+
+  .contact-section .paper-panel__content::after {
+    display: none;
+  }
+
+  .contact-section__stamp {
+    display: grid;
+    width: clamp(3.75rem, 6vw, 5rem);
+    aspect-ratio: 0.82;
+    place-content: center;
+    justify-items: center;
+    margin: -0.75rem -1.4rem 1rem auto;
+    border: 0.3rem dotted var(--paper-elevated);
+    outline: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper-elevated);
+    font-family: var(--utility-font);
+    font-size: clamp(0.48rem, 0.8vw, 0.62rem);
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    line-height: 1.35;
+    pointer-events: none;
+  }
+
 }
 
 @media (max-width: 460px) {
+  .contact-section__stamp {
+    width: 3.1rem;
+    margin-right: -1.65rem;
+    font-size: 0.42rem;
+  }
+
   .contact-section address {
     grid-template-columns: 1fr;
   }

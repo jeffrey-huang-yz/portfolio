@@ -13,7 +13,7 @@
   --coral: #090908;
   --backdrop: #f8f8f5;
   --grid: #d2d2cd;
-  --chrome: rgba(250, 250, 247, 0.92);
+  --chrome: rgba(250, 250, 247, 0.82);
   --chrome-solid: #fafaf7;
   --chrome-ink: #090908;
   --chrome-muted: #5f5f5a;
@@ -29,7 +29,7 @@
   color-scheme: dark;
   --backdrop: #080808;
   --grid: #242424;
-  --chrome: rgba(8, 8, 8, 0.92);
+  --chrome: rgba(8, 8, 8, 0.82);
   --chrome-solid: #080808;
   --chrome-ink: #f7f7f2;
   --chrome-muted: #b8b8b2;
@@ -42,7 +42,7 @@
     color-scheme: dark;
     --backdrop: #080808;
     --grid: #242424;
-    --chrome: rgba(8, 8, 8, 0.92);
+    --chrome: rgba(8, 8, 8, 0.82);
     --chrome-solid: #080808;
     --chrome-ink: #f7f7f2;
     --chrome-muted: #b8b8b2;

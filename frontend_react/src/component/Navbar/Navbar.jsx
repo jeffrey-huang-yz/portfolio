@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { navItems } from '../../data/portfolio';
 import ThemeToggle from '../ThemeToggle';
 import './Navbar.scss';
@@ -78,10 +78,6 @@ const Navbar = ({ activeSection }) => {
   return (
     <header className="site-header">
       <nav className="site-nav" aria-label="Primary navigation">
-        <a className="site-nav__brand" href="#home" aria-label="Jeffrey Huang, home">
-          <span>JH</span><i aria-hidden="true">.</i>
-        </a>
-
         <NavLinks activeSection={activeSection} />
 
         <div className="site-nav__actions">
@@ -102,7 +98,7 @@ const Navbar = ({ activeSection }) => {
       </nav>
 
       {menuOpen ? (
-        <motion.div
+        <m.div
           ref={mobileNavRef}
           id="mobile-navigation"
           className="mobile-nav"
@@ -129,7 +125,7 @@ const Navbar = ({ activeSection }) => {
           <nav aria-label="Mobile navigation">
             <NavLinks activeSection={activeSection} onNavigate={closeMenu} mobile />
           </nav>
-        </motion.div>
+        </m.div>
       ) : null}
     </header>
   );

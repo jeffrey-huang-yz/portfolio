@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import './About.scss';
 import { SectionShell } from '../../component';
 
@@ -34,15 +34,15 @@ const profileMapVisual = (
   </div>
 );
 
-const detailViewport = { once: true, amount: 0.2, margin: '180px 0px 120px 0px' };
+const detailViewport = { once: true, amount: 0.25, margin: '0px 0px -16% 0px' };
 
 const CapabilitySchematic = ({ type, reduceMotion, index }) => {
   const motionProps = {
-    initial: reduceMotion ? false : { opacity: 0.2, scale: 0.965 },
-    whileInView: { opacity: 1, scale: 1 },
+    initial: reduceMotion ? false : { opacity: 0, y: 10, scale: 0.95 },
+    whileInView: { opacity: 1, y: 0, scale: 1 },
     viewport: detailViewport,
     transition: {
-      duration: 0.48,
+      duration: 0.62,
       delay: index * 0.07,
       ease: [0.22, 1, 0.36, 1],
     },
@@ -50,7 +50,7 @@ const CapabilitySchematic = ({ type, reduceMotion, index }) => {
 
   if (type === 'UX') {
     return (
-      <motion.svg {...motionProps} className="capability__schematic" viewBox="0 0 260 150" aria-hidden="true" focusable="false">
+      <m.svg {...motionProps} className="capability__schematic" viewBox="0 0 260 150" aria-hidden="true" focusable="false">
         <path className="capability__measure" d="M40 14v12m0-6h168m0-6v12M24 34h12m-6 0v84m-6 0h12" />
         <rect x="40" y="34" width="168" height="84" />
         <rect x="58" y="52" width="61" height="48" />
@@ -60,13 +60,13 @@ const CapabilitySchematic = ({ type, reduceMotion, index }) => {
         <circle cx="40" cy="118" r="4" />
         <circle cx="208" cy="118" r="4" />
         <path className="capability__cursor" d="M190 87l27 28-13 1-7 12z" />
-      </motion.svg>
+      </m.svg>
     );
   }
 
   if (type === 'SYS') {
     return (
-      <motion.svg {...motionProps} className="capability__schematic" viewBox="0 0 260 150" aria-hidden="true" focusable="false">
+      <m.svg {...motionProps} className="capability__schematic" viewBox="0 0 260 150" aria-hidden="true" focusable="false">
         <path className="capability__flow" d="M42 75h52m72 0h52M130 34v19m0 44v19" />
         <circle cx="30" cy="75" r="12" />
         <circle cx="230" cy="75" r="12" />
@@ -75,12 +75,12 @@ const CapabilitySchematic = ({ type, reduceMotion, index }) => {
         <rect x="94" y="53" width="72" height="44" />
         <path d="M105 64h50M105 75h50M105 86h50" />
         <path className="capability__port" d="M24 72h12M124 19h12M224 72h12M124 125h12" />
-      </motion.svg>
+      </m.svg>
     );
   }
 
   return (
-    <motion.svg {...motionProps} className="capability__schematic" viewBox="0 0 260 150" aria-hidden="true" focusable="false">
+    <m.svg {...motionProps} className="capability__schematic" viewBox="0 0 260 150" aria-hidden="true" focusable="false">
       <rect x="22" y="22" width="216" height="106" />
       <path d="M22 45h216" />
       <circle className="capability__dot" cx="35" cy="34" r="2.5" />
@@ -90,7 +90,7 @@ const CapabilitySchematic = ({ type, reduceMotion, index }) => {
       <rect x="42" y="59" width="112" height="39" />
       <rect x="165" y="59" width="53" height="39" />
       <path d="M42 108h176M42 117h72M123 117h44M176 117h42" />
-    </motion.svg>
+    </m.svg>
   );
 };
 
@@ -137,19 +137,19 @@ const About = ({ abouts }) => {
         <p id="interest-note-title" className="eyebrow">Interests</p>
         <ul>
           {interestNotes.map((interest, index) => (
-            <motion.li
+            <m.li
               key={interest}
-              initial={reduceMotion ? false : { opacity: 0, y: 7 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 9 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={detailViewport}
               transition={{
-                duration: 0.36,
+                duration: 0.46,
                 delay: index * 0.045,
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
               {interest}
-            </motion.li>
+            </m.li>
           ))}
         </ul>
       </aside>

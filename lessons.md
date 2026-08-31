@@ -513,3 +513,60 @@
 - A bundled local snapshot makes CMS enhancement deferrable. Load remote content after first paint—or use a small direct CDN request—so a public SDK and its transport dependencies do not compete with the initial portfolio render.
 - Frame-frequency UI feedback such as a progress range can live in refs and local DOM properties, but measured target-device evidence should decide whether the extra imperative code is worth retaining.
 - Do not generalize one successful Canvas overlay into a Canvas-rendered site. Text, links, articles, and section structure are already best served by semantic DOM; Canvas is justified only for the one continuous decorative stroke whose SVG invalidation was proven expensive.
+
+## Keeping optional data and animation off the critical path
+
+- If a complete local content snapshot is already the first render, treat the CMS as an idle enhancement. A dynamic import keeps the API client, transport, and observable code out of the entry bundle without delaying visible content.
+- Separate deterministic image-URL construction from the remote client before deferring the client. Otherwise a synchronous image helper import can pull the entire CMS transport graph back into the initial bundle.
+- A snapshot-backed portfolio does not need five automatic CMS retries when offline. Disabling retries shortens the failure path and avoids redundant network work while preserving the already-visible local content.
+- Framer Motion's strict `LazyMotion` plus `m` makes the selected animation feature set explicit. For this portfolio, `domAnimation` preserves opacity, transform, hover, tap, and viewport reveals while reducing included Motion source from about 368 KiB to 236 KiB before minification.
+- A visual request can also remove paint cost: showing native project colors eliminates a per-image grayscale/contrast raster effect. Do not pre-bake a monochrome treatment when the intended design has changed to full color.
+- On a mostly neutral scrapbook sheet, one content-specific ink color can establish hierarchy more effectively than recoloring an entire section. Applying cinnabar only to the chronological rail, nodes, and years makes sequence—not decoration—the focal point.
+- When a rail and node must register, store the axis—not separate left offsets—as the responsive token. Derive each element's left edge from its own width; increasing the rail thickness then cannot silently move its center away from the node.
+
+## Adding a new object metaphor without moving measured geometry
+
+- When another system derives coordinates from section bounds, separate visual transformation from layout transformation. Absolutely positioned pseudo-elements can supply a postcard surface, border, shadow, stamp, and postal marks without changing the measured box tree.
+- Preserve node count and line count when replacing sensitive contact data. Swapping the two-label/two-value address grid in place removed the phone number while keeping the Contact height—and therefore every downstream route coordinate—exactly stable.
+- Decorative placement must account for existing functional markers, especially on narrow screens. A postage stamp that looks correct on desktop can collide with a responsive route station; move the paint layer, never the measured navigation marker.
+- A divider should express the layout's current direction. Use a vertical divider for side-by-side message/address columns and switch the same border box to a horizontal divider when those columns stack.
+- Verify invariants as data, not by eye. Comparing complete SVG `d` strings plus document, paper, panel, content, and marker rectangles across every breakpoint proved the redesign changed paint only.
+- Shorter, conversational copy can make a decorative composition feel more modern without adding another visual element; the serif invitation now carries the postcard's personality while the supporting sentence stays quiet.
+- Once the postcard structure is visually self-evident, an explicit postcard eyebrow becomes redundant; removing it lets the invitation lead and reduces competing utility text.
+- Decorative media can retain an accessible figure name without a visible technical caption; removing the character count simplifies the hero while preserving meaning for assistive technology.
+- When replacing a favicon, a distinct asset filename is more reliable than overwriting the old URL because browsers cache tab icons aggressively and independently of most page assets.
+
+## Designing a stable utility navbar
+
+- When a centered primary navigation has controls only on one side, use equal flexible side tracks rather than compensating with guessed padding. An intentionally empty balancing track keeps the center exact while the action group remains edge-aligned.
+- A theme label should not be the control's sizing mechanism. Keep both state labels mounted in a fixed outer button and invert only the selected inner cell so toggling cannot push adjacent navigation.
+- Apply the initial theme in document markup before application JavaScript. A dark root fallback plus a minimal saved-light check prevents the first frame from flashing the wrong exterior chrome.
+- Shared social records prevent the compact navbar tokens and full Contact labels from drifting to different destinations. Visual abbreviations still need full accessible link names and explicit new-tab context.
+- Test the pixel immediately above a responsive breakpoint. A layout that is comfortable at 1440 px can still overlap at 901 px even when 900 px correctly switches to a menu.
+- Fixed headers should avoid live backdrop sampling over long, textured pages. An opaque theme-aware surface is both visually cleaner and independent of the expensive content moving beneath it.
+- The complete dark-first/social implementation described above was later reverted at the user's request. Treat these as technical observations, not the currently approved navbar direction.
+- A fixed outer width is not quite enough for typographic calm: reserve a label slot as well, so strings of different lengths do not recenter the glyph-and-label group even when the button box itself is stable.
+- When one shared navigation record feeds both the header and another interface, scope casing to the header rather than rewriting the data. This changes presentation without silently changing the rail or accessible source labels.
+- Removing a left-side brand can preserve true center alignment with a paint-free flex balance matching the action width. Hide that balance when mobile links disappear so the remaining controls still align naturally.
+- Broad interaction rules need deliberate component opt-outs. A higher-specificity header override can remove global translate/shadow effects while leaving flat color, underline, and focus feedback intact.
+- Treat backdrop depth separately from control depth. Increasing only the blur can soften the fixed header without bringing back raised shadows, transforms, or state-dependent layout movement.
+- When a measured composition no longer needs a visible rule, remove its color rather than its box-model border. A transparent structural border preserves the postcard and route geometry while simplifying the visual hierarchy.
+- Distinguish structural dividers from material effects before removing a “line”: in this postcard, the divider is a border while the fold is a narrow background gradient. The fold can be removed as paint without touching either column's box model.
+- Positioning language can live outside visible React content. When removing a phrase globally, inspect the document title, search description, Open Graph metadata, and regenerated production HTML—not only rendered section copy.
+- For an absolutely positioned decoration that intentionally occupies a text row, reserve space on the specific colliding copy block instead of padding the whole section. This preserves the headline, stamp scale, and surrounding alignment while producing a predictable mobile wrap.
+- Width-based wrapping can still read as text sitting beneath a decoration even when rectangles do not intersect. When the required relationship is unequivocal, reserve the decoration's full vertical band and verify actual text-fragment rectangles—not only element boxes—across the breakpoint boundary.
+- When repeated paint-only spacing fixes disagree with a target screenshot, change the relationship rather than increasing offsets. An in-flow decorative node provides a browser-enforced ordering guarantee; retaining the pseudo-element only on desktop preserves the original composition where overlay space is ample.
+- An in-flow decoration does not need to interrupt the copy it protects. Moving mobile postage to the address block preserves its postcard meaning, guarantees separation from the message, and restores the tighter heading-to-body rhythm.
+
+## Timing viewport reveals where they can be read
+
+- A positive `IntersectionObserver` root margin is useful for preloading, but it is counterproductive for one-time visual reveals: the animation can finish before the component reaches the physical viewport.
+- Define scroll-entry timing from a readable viewport zone. A negative bottom margin moves the observer boundary upward, while `amount` ensures a meaningful portion of the target is already present before motion begins.
+- Test the observed target's actual rectangle at the moment it activates. At both desktop and mobile sizes, a 16% contracted bottom boundary plus 25% target visibility placed these reveals around 75–80% of viewport height rather than below the screen.
+- Better timing usually needs no new scroll work. Retaining Motion's IntersectionObserver-based `whileInView`, transform/opacity properties, `once:true`, and reduced-motion fallback keeps the fix compositor-friendly and avoids a frame-by-frame listener.
+
+## Making backdrop blur perceptible
+
+- The blur radius is only half of a glass treatment. If the overlay color is too opaque, the filtered backdrop cannot contribute enough detail for the blur to be visible.
+- Adjust overlay alpha before increasing blur radius. Here, moving the navbar surface from 0.92 to 0.82 opacity made the existing 28 px filter legible without widening its sampling region or changing layout.
+- Pair unprefixed and WebKit-prefixed backdrop-filter declarations when the visual depends on the effect, while preserving a readable translucent background as the fallback.

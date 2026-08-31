@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { client } from '../client';
 import { fallbackPortfolio, portfolioQuery } from '../data/portfolio';
 
 const localWorkByTitle = new Map(
@@ -27,18 +26,30 @@ export const usePortfolioData = () => {
 
   useEffect(() => {
     let isCurrent = true;
+    let idleId;
+    let timeoutId;
 
-    client
-      .fetch(portfolioQuery)
-      .then((data) => {
-        if (isCurrent) setPortfolio(withFallback(data));
-      })
-      .catch(() => {
-        // The bundled snapshot is intentionally the offline and first-paint state.
-      });
+    const refreshPortfolio = () => {
+      import('../client')
+        .then(({ client }) => client.fetch(portfolioQuery))
+        .then((data) => {
+          if (isCurrent) setPortfolio(withFallback(data));
+        })
+        .catch(() => {
+          // The bundled snapshot is intentionally the offline and first-paint state.
+        });
+    };
+
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(refreshPortfolio, { timeout: 1600 });
+    } else {
+      timeoutId = window.setTimeout(refreshPortfolio, 250);
+    }
 
     return () => {
       isCurrent = false;
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
     };
   }, []);
 

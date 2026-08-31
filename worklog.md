@@ -753,3 +753,152 @@
 - The strongest initial-load candidates are deferring or replacing the Sanity SDK path and slimming Framer Motion. The production source map contains about 368 KiB of Framer Motion source plus a Sanity path comprising about 126 KiB `@sanity/client`, 66 KiB RxJS, 30 KiB get-it, and 16 KiB `@sanity/image-url` before minification.
 - The Canvas pattern could also move JourneyRail progress from frame-frequency React state to refs/direct local DOM updates, but this exact isolation was previously tested and did not improve the target flicker. Treat it as a small CPU cleanup, not the next visual fix.
 - Keep chapter DOM, route-measured layouts, native scrolling, and the existing media-only `content-visibility` boundary. Do not apply Canvas, virtualization, or `will-change` broadly.
+
+## 2026-08-27 · Native-color Work media and initial-load optimization
+
+- Created local rollback checkpoint `cf0e56c31001657bb00e33450e571b1bf3656694` (`chore: checkpoint canvas route optimization`) on `main` before changing optimization behavior; nothing was pushed.
+- Removed the Work image `grayscale(1) contrast(1.03)` filter. All nine responsive AVIF project images now render in their native colors while retaining lazy loading, async decoding, source-level `sizes`, capped compact candidates, and media-only `content-visibility`.
+- Split Sanity image URL construction from the API client. The bundled portfolio remains the immediate render, while `@sanity/client` now loads during browser idle time and refreshes the snapshot afterward. The offline failure path performs one request instead of five retries.
+- Wrapped the app in strict `LazyMotion` with `domAnimation` and replaced full `motion` components with the smaller `m` entry point. Existing hero, filter, Profile, Experiences, Contact, and reduced-motion behavior remains intact.
+- The production entry bundle fell from 111.40 kB to 82.31 kB gzip. The 17.52 kB Sanity client is now an idle-loaded chunk; its 4.71 kB event-source helper remains secondary/on-demand and was not requested during the read-only QA flow.
+- Four route unit tests pass. Chrome QA at 1440×1000 and 390×844, plus reduced-motion mobile, confirms nine complete local images with `filter:none`, final hero opacity/transform, wrapped mobile filters, zero horizontal overflow, and no application runtime errors. The sandbox's blocked Sanity request is expected and leaves the snapshot intact.
+- The optimized implementation and regenerated production snapshot remain uncommitted against the checkpoint for review and easy rollback.
+
+## 2026-08-27 · Experiences timeline focal color
+
+- Introduced a chapter-local cinnabar accent (`#ad281f`) for the Experiences timeline, keeping the rest of the paper and typography neutral.
+- Applied the accent only to the central rail, registration-ring nodes, and years. Increased the rail to 2 px and added a restrained offset ink impression so the chronological structure becomes the focal point without recoloring the experience copy.
+- Browser checks at 1440×1000 and reduced-motion 390×844 confirm consistent color, rail/node alignment within 0.61 px, zero horizontal overflow, and no page errors.
+- Production build succeeds at 82.31 kB entry JavaScript / 8.58 kB CSS gzip. The CSS increase is 58 bytes gzip; no JavaScript changed.
+- Follow-up review exposed the 2 px rail's center shifting 0.61 px from the nodes because the old rules positioned separate left edges. Replaced both offsets with one responsive `--timeline-axis`, centered each element mathematically on it, and removed the asymmetric rail shadow. Chrome now measures only 0.008 px of subpixel rounding difference at 1440, 820, 390, and 320 px widths.
+
+## 2026-08-29 · Contact postcard redesign
+
+- Captured pre-change route strings, document height, continuous-paper bounds, Contact panel/content bounds, and `05` stamp centers at 1440×1000, 1280×720, 1024×768, 820×1180, 390×844, and 320×568.
+- Recast Contact as a vintage postcard: the left side holds the written message and email; the right side uses a postal divider, ruled sender/location fields, social links, a CSS postage stamp, and the existing circular ornament as a postmark.
+- Removed the visible phone number, `Direct` label, and `tel:` link. Kept the same four address-grid nodes by replacing them with `From — Jeffrey Huang` and `Location — Toronto, Canada`, preserving the section's measured footprint.
+- Kept the outer Contact panel borderless. All postcard surface, border, shadow, cancellation rules, stamp, and postal dots are static pseudo-elements that do not participate in layout or route measurement.
+- On mobile, the address divider switches to a horizontal rule and the decorative stamp clears the route's fixed `05` marker. Six tested widths retain zero overflow, no text/stamp collision, one Contact heading, one semantic address, and the named social navigation.
+- Final before/after comparison reports exact equality for both route `d` strings and every recorded document, paper, Contact, content, and `05` stamp measurement at all six viewports.
+- Production build succeeds at 82.28 kB entry JavaScript and 8.94 kB CSS gzip. Four route tests pass, reduced motion exposes the static route and immediately visible Contact content, and browser QA reports no console or page errors.
+- Exact searches find no phone digits or `tel:+16476393586` in source, public assets, or the regenerated production snapshot. Changes remain uncommitted and nothing was pushed.
+
+## 2026-08-29 · Contact invitation copy
+
+- Replaced the Contact heading with lowercase `let's connect!` and set it in the same Times serif used by the portfolio's editorial headings.
+- Replaced the formal supporting paragraph with `i'm always down to meet new people and talk about work, hobbies, or anything else`.
+- Kept the existing size and spacing because the requested “increase the …” target was cut off and could not be safely inferred.
+- Production build succeeds at 82.26 kB entry JavaScript / 8.94 kB CSS gzip; four route tests pass. Desktop and mobile browser checks show zero overflow, shared route geometry, and no collisions between the revised heading, postage, or `05` marker.
+
+## 2026-08-29 · Contact label cleanup
+
+- Removed the `Postcard / leave a note` eyebrow from above the Contact heading.
+- Lowercased the copyright name to `jeffrey huang` and the return link to `back to the beginning`.
+- Regenerated the production snapshot at 82.24 kB entry JavaScript / 8.94 kB CSS gzip; all four route tests pass.
+
+## 2026-08-29 · Hero portrait caption cleanup
+
+- Removed the visible `self portrait / 119 × 73 characters` figcaption from the ASCII portrait and deleted its now-unused CSS.
+- Kept the semantic figure and `ASCII portrait of Jeffrey Huang` accessible name intact.
+- Production build succeeds at 82.20 kB entry JavaScript / 8.91 kB CSS gzip; all four route tests pass.
+
+## 2026-08-29 · ASCII portrait favicon
+
+- Added the supplied framed ASCII portrait as `public/ascii-portrait-favicon.png` and changed the document favicon link to use it.
+- Used a new filename so existing browser caches do not continue presenting the previous `favicon.ico`.
+- Verified identical SHA-256 hashes across the supplied file, public asset, and generated build asset; the production HTML references the new image.
+- Production build remains 82.20 kB entry JavaScript / 8.91 kB CSS gzip; all four route tests pass.
+
+## 2026-08-29 · Dark-first social navbar
+
+- Removed the `JH.` brand and rebuilt the desktop header as a three-track grid: a blank balancing track, mathematically centered primary navigation, and right-aligned social/theme utilities.
+- Added shared LinkedIn, GitHub, and Instagram records. The header and mobile drawer use compact `IN`, `GH`, and `IG` utility tokens with full accessible names; Contact continues to show the full social labels from the same data.
+- Replaced the three-state automatic theme cycle with a direct dark/light switch. Dark is the fresh and legacy-`auto` default, saved light remains persistent, startup HTML applies the correct theme before React, and the switch stays exactly 120×44 px in both states.
+- Removed the live navbar backdrop blur, added clipped-corner active tabs, retained lowercase utility typography, and made the phone drawer full-screen with its own index label and social row.
+- Added Navbar and ThemeToggle tests. All three suites and eight tests pass; the production build succeeds at 82.23 kB entry JavaScript / 9.24 kB CSS gzip.
+- Browser QA at eight responsive sizes confirms exact route/document/Contact/stamp geometry parity, a 76 px header, no horizontal overflow, no 901 px control overlap, 44 px social targets, theme persistence, Escape/focus restoration, and zero console/page errors. Changes remain uncommitted and nothing was pushed.
+
+## 2026-08-29 · Navbar redesign rollback
+
+- Reverted the immediately preceding dark-first/social navbar implementation at the user's request.
+- Restored the `JH.` brand, original desktop navigation, backdrop blur, three-state automatic/light/dark theme cycle, compact mobile control, and prior slide-in drawer.
+- Removed the header social utilities, shared social-data refactor, and the two redesign-specific test files while preserving Contact's existing LinkedIn, GitHub, and Instagram links.
+- Regenerated the production snapshot. Its entry assets return exactly to the pre-redesign `main.810c9cd7.js` (82.20 kB gzip) and `main.295122f9.css` (8.91 kB gzip); all four route tests pass.
+- All earlier uncommitted portfolio changes remain intact. Nothing was committed or pushed.
+
+## 2026-08-29 · Stable theme-toggle width
+
+- Kept the restored `auto → light → dark` theme cycle unchanged.
+- Fixed the desktop control at 88 px and reserved 36.8 px for its label, preventing state text from moving the control or neighboring navigation.
+- Kept the existing compact mobile treatment at a fixed 44 px with the label hidden at 420 px and below.
+- Production build succeeds at 82.20 kB entry JavaScript / 8.95 kB CSS gzip; all four route tests pass. Chrome confirms identical widths through all three states at 1440×1000 and 390×844 with zero overflow or page errors.
+
+## 2026-08-29 · Brandless, flat navbar
+
+- Removed the `JH.` home link from Navbar markup.
+- Added an invisible 88 px desktop balance matching the fixed theme control so the primary links remain centered at exactly the viewport midpoint; the balance disappears on mobile and actions remain right-aligned.
+- Rendered desktop links, mobile links, résumé, and the theme-state label lowercase without changing shared navigation data used elsewhere.
+- Scoped overrides to the header so navbar links and buttons no longer translate or cast layered shadows on hover or mouse-down. Flat color, underline, focus, and keyboard behavior remain.
+- Production build succeeds at 82.16 kB entry JavaScript / 8.95 kB CSS gzip; all four route tests pass. Chrome verifies exact centering, lowercase computed styles, no hover/pressed transform or shadow, zero overflow, and no page errors on desktop and mobile.
+
+## 2026-08-29 · Stronger navbar blur
+
+- Increased the fixed navbar backdrop blur from 18 px to 28 px for a softer separation from the scrapbook content beneath it.
+- Kept the header surface, border, dimensions, layout, and flat hover/pressed behavior unchanged.
+- Production build succeeds at 82.16 kB entry JavaScript / 8.95 kB CSS gzip; all four route tests pass.
+
+## 2026-08-30 · Contact divider cleanup
+
+- Removed the visible vertical rule between the postcard message and address columns.
+- Kept the transparent structural border and existing grid intact so Contact dimensions and route measurements do not change; the mobile horizontal separator remains.
+- Production build succeeds at 82.16 kB entry JavaScript / 8.95 kB CSS gzip; all four route tests pass.
+
+## 2026-08-30 · Contact fold correction
+
+- Corrected the previous interpretation: restored the deliberate rule separating the message and address columns.
+- Removed the narrow center gradient that simulated a physical fold in the postcard paper.
+- Kept all Contact layout measurements unchanged. Production build succeeds at 82.16 kB entry JavaScript / 8.92 kB CSS gzip; all four route tests pass.
+
+## 2026-08-30 · Metadata positioning cleanup
+
+- Removed the unwanted frontend-oriented qualifier from the browser title, Open Graph title, and search description.
+- Replaced the title positioning with `Computer Engineering Student` and kept the description natural without the removed qualifier.
+- Confirmed zero case-insensitive matches in source and generated output. Production build remains 82.16 kB entry JavaScript / 8.92 kB CSS gzip; all four route tests pass.
+
+## 2026-08-30 · Mobile Contact stamp clearance
+
+- Reproduced the postage-stamp collision at both 390×844 and 320×568; only the introductory sentence overlapped, while the heading and email were already clear.
+- Reserved a 3 rem strip beside the introduction below 460 px, allowing its text to wrap around the fixed decorative stamp without moving or shrinking the stamp.
+- Headless Chrome reports zero overlap with all three text elements and zero horizontal overflow at both mobile sizes. Production build succeeds at 82.16 kB entry JavaScript / 8.94 kB CSS gzip; all four route tests pass.
+
+## 2026-08-30 · Mobile Contact stamp dedicated row
+
+- Superseded the side-wrapping fix after the target browser still presented the introduction beneath the stamp.
+- Restored the introduction to full width and added a 5 rem mobile lead-in so its first line starts entirely below the stamp instead of sharing its vertical band.
+- Text-range checks at 461, 460, 430, 390, 375, and 320 px show zero collisions, at least 10.7 px clearance, and zero overflow. Production build succeeds at 82.16 kB entry JavaScript / 8.94 kB CSS gzip; all four route tests pass.
+
+## 2026-08-30 · Structural mobile postage flow
+
+- Used the supplied screenshot to confirm the target browser still displayed the sentence behind the absolutely positioned postage despite padding-based clearance.
+- Kept the existing pseudo-element stamp on desktop, but disabled it for the full stacked Contact layout at 780 px and below.
+- Added an `aria-hidden` postage element in normal flow between the heading and introduction on stacked layouts. The paragraph is now a later block rather than content sharing the stamp's paint layer.
+- Browser checks at 781, 780, 600, 461, 460, 430, 390, 375, and 320 px confirm the correct renderer switches at the breakpoint, 18 px sentence clearance, correct DOM order, and zero overflow. Production build succeeds at 82.20 kB entry JavaScript / 8.97 kB CSS gzip; all four route tests pass.
+
+## 2026-08-30 · Compact Contact message spacing
+
+- Moved the in-flow mobile postage from between the heading and introduction to the address block below the message and email.
+- Restored the original 24 px space between `let's connect!` and the introductory sentence without returning to an absolute mobile overlay.
+- Chrome checks at 781, 780, 600, 460, 390, and 320 px confirm no paragraph/stamp collision, correct renderer handoff, and zero overflow. Production build succeeds at 82.19 kB entry JavaScript / 8.97 kB CSS gzip; all four route tests pass.
+
+## 2026-08-30 · Readable scroll-reveal timing
+
+- Replaced the large positive observer margins in Profile, Experiences, and Contact with a viewport-relative reveal zone: 25% of each detail must cross a boundary 16% above the bottom edge.
+- Strengthened only the existing registration motion with slightly longer transform/opacity transitions; the hero, project filters, paper surface, Canvas route, and native scrolling remain unchanged.
+- Chrome checks at 1280×720 and 390×844 show the tested details staying hidden before the threshold, beginning around 75–80% of viewport height, and settling fully with zero overflow. Reduced-motion rendering remains immediately static.
+- Production build succeeds at 82.18 kB entry JavaScript / 8.97 kB CSS gzip; all four route tests pass.
+
+## 2026-08-30 · Perceptible navbar blur
+
+- Kept the established 28 px backdrop blur and lowered the light/dark chrome surface opacity from 0.92 to 0.82 so the page underneath visibly contributes to the effect.
+- Added the prefixed WebKit backdrop-filter declaration for browser consistency without altering the navbar's height, alignment, controls, or border.
+- Chrome confirms the 0.82 theme surfaces and active `blur(28px)` at an unchanged 76 px header height with zero overflow. Production build remains 82.18 kB entry JavaScript / 8.97 kB CSS gzip; all four route tests pass.

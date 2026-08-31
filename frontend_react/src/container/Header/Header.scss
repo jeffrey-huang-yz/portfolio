@@ -91,16 +91,6 @@
   white-space: pre;
 }
 
-.hero-ascii figcaption {
-  padding: 0.65rem 0.12rem 0.08rem;
-  color: var(--ink-soft);
-  font-family: var(--utility-font);
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .hero-points {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

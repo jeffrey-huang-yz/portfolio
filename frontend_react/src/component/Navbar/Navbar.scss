@@ -10,7 +10,8 @@
   border-bottom: 1px solid var(--chrome-line);
   background: var(--chrome);
   color: var(--chrome-ink);
-  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
 }
 
 .site-nav {
@@ -22,22 +23,9 @@
   gap: 2rem;
 }
 
-.site-nav__brand {
-  display: inline-flex;
-  align-items: baseline;
-  color: var(--chrome-ink);
-  font-family: var(--display-font);
-  font-size: 1.35rem;
-  font-weight: 850;
-  letter-spacing: -0.08em;
-  text-decoration: none;
-}
-
-.site-nav__brand i {
-  color: var(--chrome-ink);
-  font-size: 1.6em;
-  font-style: normal;
-  line-height: 0;
+.site-nav::before {
+  flex: 0 0 5.5rem;
+  content: '';
 }
 
 .site-nav__links,
@@ -61,6 +49,7 @@
   font-size: 0.9rem;
   font-weight: 680;
   text-decoration: none;
+  text-transform: lowercase;
 }
 
 .site-nav__links a::after {
@@ -110,8 +99,11 @@
 
 .theme-toggle {
   display: inline-flex;
+  flex: 0 0 5.5rem;
   align-items: center;
+  justify-content: center;
   gap: 0.45rem;
+  width: 5.5rem;
   padding: 0.5rem 0.7rem;
 }
 
@@ -121,11 +113,13 @@
 }
 
 .theme-toggle__label {
+  width: 2.3rem;
   font-family: var(--utility-font);
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  text-align: left;
+  text-transform: lowercase;
 }
 
 .menu-button {
@@ -183,6 +177,20 @@
   letter-spacing: -0.05em;
   line-height: 1.15;
   text-decoration: none;
+  text-transform: lowercase;
+}
+
+@media (hover: hover) {
+  .site-header :where(a, button):hover {
+    box-shadow: none !important;
+    transform: none !important;
+  }
+}
+
+.site-header :where(a, button):active {
+  box-shadow: none !important;
+  transform: none !important;
+  transition-duration: 0s;
 }
 
 .mobile-nav__links a[aria-current='location'] {
@@ -200,12 +208,26 @@
     justify-content: space-between;
   }
 
+  .site-nav::before {
+    display: none;
+  }
+
+  .site-nav__actions {
+    margin-left: auto;
+  }
+
   .menu-button {
     display: block;
   }
 }
 
 @media (max-width: 420px) {
+  .theme-toggle {
+    flex-basis: 2.75rem;
+    width: 2.75rem;
+    padding-inline: 0;
+  }
+
   .theme-toggle__label {
     display: none;
   }
