@@ -1,0 +1,41 @@
+import React from 'react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { LazyMotion, domAnimation } from 'framer-motion';
+import Navbar from './Navbar';
+const mockLenis = { stop: jest.fn(), start: jest.fn(), resize: jest.fn(), scrollTo: jest.fn() };
+jest.mock('lenis/react', () => ({ useLenis: () => mockLenis }), { virtual: true });
+beforeEach(() => {
+  window.matchMedia = jest.fn((query) => ({ matches: query.includes('max-width'), addEventListener: jest.fn(), removeEventListener: jest.fn(), addListener: jest.fn(), removeListener: jest.fn() }));
+  document.body.innerHTML = '<div id="root"></div><section id="work">Work</section>';
+  document.body.style.overflow = 'auto';
+  Object.values(mockLenis).forEach((fn) => fn.mockClear());
+});
+const mount = () => render(<LazyMotion features={domAnimation}><Navbar activeSection="home" /></LazyMotion>, { container: document.getElementById('root') });
+test('portal traps focus, inerts background, and restores overflow and focus after Escape', async () => {
+  mount();
+  const open = screen.getByRole('button', { name: 'Open navigation menu' });
+  fireEvent.click(open);
+  const dialog = screen.getByRole('dialog');
+  expect(dialog.parentElement).toBe(document.body);
+  expect(document.getElementById('root').inert).toBe(true);
+  expect(mockLenis.stop).toHaveBeenCalled();
+  expect(document.body.style.overflow).toBe('hidden');
+  const close = screen.getByRole('button', { name: 'Close navigation menu' });
+  expect(document.activeElement).toBe(close);
+  fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+  expect(document.activeElement.textContent).toContain('Résumé');
+  fireEvent.keyDown(document, { key: 'Tab' });
+  expect(document.activeElement).toBe(close);
+  fireEvent.keyDown(document, { key: 'Escape' });
+  await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  await waitFor(() => expect(document.activeElement).toBe(open));
+  expect(document.body.style.overflow).toBe('auto');
+  expect(document.getElementById('root').inert).not.toBe(true);
+});
+test('unmounting an open drawer releases its locks', () => {
+  const view = mount();
+  fireEvent.click(screen.getByRole('button', { name: 'Open navigation menu' }));
+  view.unmount();
+  expect(document.body.style.overflow).toBe('auto');
+  expect(mockLenis.start).toHaveBeenCalled();
+});

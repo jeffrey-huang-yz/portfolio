@@ -1,0 +1,30 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "name": "basketball",
+      "prompt": "Use case: product photography. Asset type: transparent photographic cutout for inline large typography on a personal portfolio. Subject: One vintage burnt-orange basketball with black seams, richly pebbled leather, front three-quarter view. Near circular silhouette. Realistic analog magazine product photography, subtle material wear, crisp tactile detail, soft directional studio lighting. Isolated on a genuinely transparent alpha background, no floor, no cast shadow outside object, no backdrop, no checkerboard baked into pixels, no text, watermark or logo. Tightly frame the full object with only 2 percent empty padding; do not clip the silhouette. Output a single object composition, not a mockup or sheet.",
+      "source": "C:\\Users\\jeffr\\.codex\\generated_images\\01a0700a-10af-7300-963a-57fd0c2de225\\exec-47096123-c904-4891-856c-2aa36be94ea3.png"
+    },
+    {
+      "name": "weights",
+      "prompt": "Use case: product photography. Asset type: transparent photographic cutout for inline large typography on a personal portfolio. Subject: One vintage chrome dumbbell with stacked circular steel plates, horizontal bar, slight three-quarter perspective, wide silhouette about 2.3:1. Realistic analog magazine product photography, subtle material wear, crisp tactile detail, soft directional studio lighting. Isolated on a genuinely transparent alpha background, no floor, no cast shadow outside object, no backdrop, no checkerboard baked into pixels, no text, watermark or logo. Tightly frame the full object with only 2 percent empty padding; do not clip the silhouette. Output a single object composition, not a mockup or sheet.",
+      "source": "C:\\Users\\jeffr\\.codex\\generated_images\\01a0700a-10af-7300-963a-57fd0c2de225\\exec-9f59641b-6f3d-432d-9b5d-d75a0efabdc7.png"
+    },
+    {
+      "name": "jacket",
+      "prompt": "Use case: product photography. Asset type: transparent photographic cutout for inline large typography on a personal portfolio. Subject: One unbranded oxblood leather bomber jacket, front view as an invisible mannequin, relaxed sleeves, visible seams and silver zipper. Entire jacket only, no person. Realistic analog magazine product photography, subtle material wear, crisp tactile detail, soft directional studio lighting. Isolated on a genuinely transparent alpha background, no floor, no cast shadow outside object, no backdrop, no checkerboard baked into pixels, no text, watermark or logo. Tightly frame the full object with only 2 percent empty padding; do not clip the silhouette. Output a single object composition, not a mockup or sheet.",
+      "source": "C:\\Users\\jeffr\\.codex\\generated_images\\01a0700a-10af-7300-963a-57fd0c2de225\\exec-d624c8a9-6c62-4067-922d-32d75376a090.png"
+    },
+    {
+      "name": "music",
+      "prompt": "Use case: product photography. Asset type: transparent photographic cutout for inline large typography on a personal portfolio. Subject: One black vinyl record with an unlettered muted red center label, near-front view with slight tilt, finely visible grooves and tiny center hole. Near circular silhouette. Realistic analog magazine product photography, subtle material wear, crisp tactile detail, soft directional studio lighting. Isolated on a genuinely transparent alpha background, no floor, no cast shadow outside object, no backdrop, no checkerboard baked into pixels, no text, watermark or logo. Tightly frame the full object with only 2 percent empty padding; do not clip the silhouette. Output a single object composition, not a mockup or sheet.",
+      "source": "C:\\Users\\jeffr\\.codex\\generated_images\\01a0700a-10af-7300-963a-57fd0c2de225\\exec-7dbac64f-87e1-4972-ab58-a95e4a1fdb99.png"
+    },
+    {
+      "name": "cards",
+      "prompt": "Use case: product photography. Asset type: transparent photographic cutout for inline large typography on a personal portfolio. Subject: Three overlapping collectible trading cards fanned sideways, original abstract fantasy creature artwork, blue green and amber colors, worn cream borders, no lettering, no recognizable franchise or logos. Wide silhouette about 1.7:1. Realistic analog magazine product photography, subtle material wear, crisp tactile detail, soft directional studio lighting. Isolated on a genuinely transparent alpha background, no floor, no cast shadow outside object, no backdrop, no checkerboard baked into pixels, no text, watermark or logo. Tightly frame the full object with only 2 percent empty padding; do not clip the silhouette. Output a single object composition, not a mockup or sheet.",
+      "source": "C:\\Users\\jeffr\\.codex\\generated_images\\01a0700a-10af-7300-963a-57fd0c2de225\\exec-db371c23-2157-467e-88ba-c9f27a1ecf5e.png"
+    }
+  ]
+}

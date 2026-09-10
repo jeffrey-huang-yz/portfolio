@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 const preferences = ['auto', 'light', 'dark'];
 
 const getSavedPreference = () => {
-  const saved = window.localStorage.getItem('theme-preference');
-  return preferences.includes(saved) ? saved : 'auto';
+  try {
+    const saved = window.localStorage.getItem('theme-preference');
+    return preferences.includes(saved) ? saved : 'auto';
+  } catch { return 'auto'; }
 };
 
 const ThemeToggle = () => {
@@ -25,7 +27,7 @@ const ThemeToggle = () => {
     };
 
     applyTheme();
-    window.localStorage.setItem('theme-preference', preference);
+    try { window.localStorage.setItem('theme-preference', preference); } catch { /* Theme still works when storage is disabled. */ }
     media.addEventListener('change', applyTheme);
 
     return () => media.removeEventListener('change', applyTheme);

@@ -8,19 +8,20 @@ const imageWidths = [480, 800, 1200];
 
 export const urlFor = (source) => builder.image(source);
 
-export const getImageUrl = (source, width = 800, format) => {
+export const getImageUrl = (source, width = 800, format, ratio) => {
   if (!source) return '';
 
   let image = builder.image(source).width(width).quality(82);
+  if (ratio) image = image.height(Math.round(width / ratio)).fit('crop');
   if (format) image = image.format(format);
 
   return image.url();
 };
 
-export const getImageSrcSet = (source, format, widths = imageWidths) => {
+export const getImageSrcSet = (source, format, widths = imageWidths, ratio) => {
   if (!source) return '';
 
   return widths
-    .map((width) => `${getImageUrl(source, width, format)} ${width}w`)
+    .map((width) => `${getImageUrl(source, width, format, ratio)} ${width}w`)
     .join(', ');
 };

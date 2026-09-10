@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { domAnimation, LazyMotion, MotionConfig } from 'framer-motion';
 import { About, Footer, Header, Skills, Work } from './container';
-import { JourneyRail, Navbar, PaperJourney } from './component';
+import { Navbar, PaperJourney } from './component';
 import { navItems } from './data/portfolio';
 import { usePortfolioData } from './hooks/usePortfolioData';
 import './App.scss';
+import SmoothScroll from './component/SmoothScroll';
+import './design-system.scss';
 
 const App = () => {
   const portfolio = usePortfolioData();
@@ -32,10 +34,10 @@ const App = () => {
   return (
     <LazyMotion features={domAnimation} strict>
       <MotionConfig reducedMotion="user">
+        <SmoothScroll>
         <div className="app">
           <a className="skip-link" href="#main-content">Skip to main content</a>
           <Navbar activeSection={activeSection} />
-          <JourneyRail activeSection={activeSection} />
           <main id="main-content">
             <PaperJourney>
               <Header />
@@ -46,6 +48,7 @@ const App = () => {
             </PaperJourney>
           </main>
         </div>
+        </SmoothScroll>
       </MotionConfig>
     </LazyMotion>
   );

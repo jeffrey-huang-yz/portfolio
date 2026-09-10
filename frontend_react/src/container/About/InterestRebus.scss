@@ -1,0 +1,54 @@
+.interest-rebus {
+  margin-top: clamp(3rem, 7vw, 6rem);
+  padding-block: 1.5rem;
+  container-type: inline-size;
+}
+
+.interest-rebus__sentence {
+  margin: 1.25rem 0 0;
+  color: var(--ink);
+  font: 400 clamp(2rem, 6.4cqw, 4.5rem)/1.35 var(--editorial-font);
+  letter-spacing: -.035em;
+  text-wrap: pretty;
+}
+
+.interest-rebus__phrase { white-space: nowrap; }
+.interest-rebus__sentence strong {
+  font: 650 .82em/1 var(--body-font);
+  letter-spacing: -.05em;
+}
+.interest-rebus__condensed {
+  font: 400 1.16em/1 'League Gothic', 'Arial Narrow', sans-serif;
+  letter-spacing: -.015em;
+}
+
+.interest-rebus__cutout {
+  display: inline-block;
+  position: relative;
+  height: 1.04em;
+  width: calc(1.04em * var(--cutout-ratio, 1));
+  vertical-align: -.2em;
+  margin-inline: .025em;
+}
+.interest-rebus__cutout img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.interest-rebus__fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 500 .24em/1.15 var(--body-font);
+  letter-spacing: 0;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  .interest-rebus__sentence { opacity: 1 !important; transform: none !important; }
+}

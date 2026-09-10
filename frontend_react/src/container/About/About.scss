@@ -145,7 +145,7 @@
   color: var(--paper-elevated);
   font-family: var(--utility-font);
   font-size: 0.62rem;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: 0.13em;
   text-align: center;
 }
@@ -212,48 +212,6 @@
 
 .capability__port {
   stroke-width: 3;
-}
-
-.interest-note {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  align-items: center;
-  margin-top: clamp(3rem, 7vw, 6rem);
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  border-left: 0.35rem solid var(--coral);
-  background: var(--paper-muted);
-}
-
-.interest-note ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.interest-note li {
-  display: grid;
-  box-sizing: border-box;
-  flex: 1 1 7rem;
-  min-width: 0;
-  min-height: 2.25rem;
-  place-items: center;
-  padding: 0.35rem 0.6rem;
-  background: var(--paper-elevated);
-  box-shadow: 2px 3px 0 color-mix(in srgb, var(--line-strong) 40%, transparent);
-  font-family: var(--utility-font);
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-align: center;
-  transform: rotate(-1deg);
-}
-
-.interest-note li:nth-child(even) {
-  transform: rotate(1.3deg);
 }
 
 @media (max-width: 1160px) {

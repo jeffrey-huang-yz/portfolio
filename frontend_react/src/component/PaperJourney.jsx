@@ -228,7 +228,16 @@ const PaperJourney = ({ children }) => {
         if (paperBounds.width === 0 || paperBounds.height === 0) return;
 
         const markers = Array.from(paper.querySelectorAll('.paper-panel__scrap'));
-        const markerBounds = markers.map((marker) => marker.getBoundingClientRect());
+        const markerBounds = markers.map((marker) => {
+          const bounds = marker.getBoundingClientRect();
+          const intro = marker.closest('.hero-intro');
+          if (!intro || reducedMotionQuery.matches || printQuery.matches) return bounds;
+          // Anchor the route to the hero's landed position, never its moving entrance.
+          const stage = marker.closest('.hero-stage');
+          const runway = parseFloat(getComputedStyle(intro).paddingBottom) || 0;
+          const pin = Number(stage?.style.getPropertyValue('--hero-pin')) || 0;
+          return { ...bounds.toJSON(), top: bounds.top + runway - pin, bottom: bounds.bottom + runway - pin };
+        });
         const waypoints = markerBounds.map((bounds) => {
           return {
             x: ((bounds.left + bounds.width / 2 - paperBounds.left) / paperBounds.width) * 100,

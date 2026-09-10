@@ -1,10 +1,10 @@
 import React from 'react';
 import { m, useReducedMotion } from 'framer-motion';
 import { PaperPanel } from '../../component';
+import { motionEase, detailViewport } from '../../motion';
 import './Footer.scss';
 
-const detailViewport = { once: true, amount: 0.25, margin: '0px 0px -16% 0px' };
-const detailTransition = { duration: 0.62, ease: [0.22, 1, 0.36, 1] };
+const detailTransition = { duration: 0.62, ease: motionEase };
 
 const Footer = () => {
   const reduceMotion = useReducedMotion();

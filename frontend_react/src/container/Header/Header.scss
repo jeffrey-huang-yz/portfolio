@@ -1,9 +1,37 @@
 .hero-section {
+  position: relative;
+  z-index: 6;
   width: min(calc(100% - clamp(3rem, 8vw, 7rem)), 82rem);
   min-height: 100svh;
   margin: 0 auto;
   padding: clamp(4.5rem, 8vw, 7rem) 0 0;
   scroll-margin-top: 0;
+}
+
+.hero-stage { position: relative; isolation: isolate; }
+.hero-stage > .hero-scrap { z-index: 1; }
+.hero-intro__placement { transform-origin: top center; }
+.hero-intro__paper { position: absolute; z-index: 0; inset: 0 auto auto 0; width: 1px; height: 1px; background: var(--paper-elevated); transform-origin: top left; pointer-events: none; }
+.hero-intro__hint { position: absolute; z-index: 2; top: 0; left: 0; width: 100%; margin: 0; text-align: center; font-size: .7rem; letter-spacing: .08em; pointer-events: none; }
+.hero-intro__hint span { margin-left: .75rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .paper-journey:has(.hero-intro) { overflow: visible; }
+  .paper-journey:has(.hero-intro) > .paper-journey__content { z-index: 6; }
+  .hero-section.hero-intro { padding-bottom: clamp(320px, 75svh, 800px); min-height: calc(100svh + clamp(320px, 75svh, 800px)); }
+  .hero-intro .paper-panel.hero-scrap { background: transparent; border-color: transparent; box-shadow: none; }
+  .hero-intro .hero-scrap::after { content: ''; position: absolute; inset: -1px; border: 1px solid var(--ink); box-shadow: 3px 4px 0 color-mix(in srgb, var(--ink) 10%, transparent); opacity: var(--hero-decor); pointer-events: none; }
+  .hero-intro .paper-panel__scrap, .hero-intro .paper-panel__tape, .hero-intro .paper-panel__folio { opacity: var(--hero-decor); }
+  .site-header { transition: opacity 240ms ease, transform 240ms var(--ease-out); }
+  .hero-opening .site-header { visibility: hidden; opacity: 0; transform: translateY(-.5rem); }
+}
+@media (prefers-reduced-motion: reduce), print {
+  .hero-intro__paper, .hero-intro__hint { display: none; }
+}
+@media print {
+  .hero-section.hero-intro { padding-bottom: 0; min-height: auto; }
+  .hero-stage, .hero-intro__placement { transform: none !important; }
+  .hero-intro .paper-panel.hero-scrap { background: var(--paper-elevated); border-color: var(--ink); }
 }
 
 .paper-panel.hero-scrap {
@@ -40,7 +68,7 @@
 .hero-masthead__first-name {
   font-family: var(--display-font);
   font-size: clamp(6rem, 19.2vw, 17rem);
-  font-weight: 780;
+  font-weight: 700;
   letter-spacing: -0.095em;
 }
 

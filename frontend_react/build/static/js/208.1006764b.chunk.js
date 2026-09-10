@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfrontend_react=self.webpackChunkfrontend_react||[]).push([[208],{208:(e,t,n)=>{n.r(t),n.d(t,{client:()=>r});const r=(0,n(482).eI)({projectId:"1buankqm",dataset:"production",apiVersion:"2024-01-01",useCdn:!0,maxRetries:0})}}]);
+//# sourceMappingURL=208.1006764b.chunk.js.map

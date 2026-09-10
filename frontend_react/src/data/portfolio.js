@@ -35,6 +35,8 @@ export const fallbackPortfolio = {
   works: [
     {
       _id: 'git-hired',
+      presentation: 'lead',
+      displayOrder: 10,
       imageSlug: 'git-hired',
       title: 'GitHired',
       description:
@@ -46,6 +48,8 @@ export const fallbackPortfolio = {
     },
     {
       _id: 'remembrance',
+      presentation: 'featured',
+      displayOrder: 20,
       imageSlug: 'remembrance',
       title: 'Remembrance',
       description:
@@ -56,6 +60,8 @@ export const fallbackPortfolio = {
     },
     {
       _id: 'diskovery',
+      presentation: 'featured',
+      displayOrder: 30,
       imageSlug: 'diskovery',
       title: 'diskovery — Spotify Music Recommender',
       description:
@@ -67,6 +73,7 @@ export const fallbackPortfolio = {
     },
     {
       _id: 'portfolio',
+      displayOrder: 40,
       imageSlug: 'portfolio',
       title: 'Fullstack Portfolio',
       description: 'A dynamic full-stack website developed using a modern web stack.',
@@ -185,9 +192,21 @@ export const fallbackPortfolio = {
 
 export const portfolioQuery = `{
   "abouts": *[_type == "abouts"] | order(_createdAt asc) { _id, title, description },
-  "works": *[_type == "works"] | order(_updatedAt desc) {
-    _id, title, description, tags, projectLink, codeLink, imgUrl
+  "works": *[_type == "works"] | order(displayOrder asc, _id asc) {
+    _id, title, description, tags, projectLink, codeLink, imgUrl, presentation, displayOrder, galleryImage, galleryFit,
+    galleryVideo { ..., asset->{_id, url, mimeType}, captions { asset->{url} } }
   },
   "skills": *[_type == "skills"] | order(name asc) { _id, name },
   "experiences": *[_type == "experiences"] | order(year desc) { _id, year, works }
 }`;
+
+// Tighten only the known legacy copy; future CMS wording always remains authoritative.
+const profileSummaries = {
+  'Frontend Development': 'I turn designs into responsive, accessible interfaces using HTML, CSS, and JavaScript.',
+  'UI/UX Design': 'I use Figma to design clear, intuitive interfaces that balance visual character with everyday usability.',
+  'Backend Development': 'I build databases and server connections that keep application data reliable and efficient.',
+};
+export const profileDescription = (about) => {
+  const original = fallbackPortfolio.abouts.find((item) => item.title === about.title);
+  return original?.description === about.description ? profileSummaries[about.title] : about.description;
+};

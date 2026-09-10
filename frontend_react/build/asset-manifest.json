@@ -1,20 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.9bc520c1.css",
-    "main.js": "/static/js/main.fdec726a.js",
-    "static/js/208.8dbc9277.chunk.js": "/static/js/208.8dbc9277.chunk.js",
-    "static/js/503.cf3c3d29.chunk.js": "/static/js/503.cf3c3d29.chunk.js",
-    "static/js/194.0e6a5f93.chunk.js": "/static/js/194.0e6a5f93.chunk.js",
+    "main.css": "/static/css/main.1275a7f1.css",
+    "main.js": "/static/js/main.54708e07.js",
+    "static/js/208.1006764b.chunk.js": "/static/js/208.1006764b.chunk.js",
+    "static/js/778.54fe14bc.chunk.js": "/static/js/778.54fe14bc.chunk.js",
+    "static/js/482.a1339168.chunk.js": "/static/js/482.a1339168.chunk.js",
+    "static/media/pokemon-logo.svg": "/static/media/pokemon-logo.6a748222880a9d71172803d154c98e86.svg",
+    "static/media/newsreader-latin-wght-normal.woff2": "/static/media/newsreader-latin-wght-normal.f30c651d14705c299705.woff2",
+    "static/media/weights.webp": "/static/media/weights.327a10f7b53cdfd499b3.webp",
+    "static/media/ibm-plex-sans-latin-wght-normal.woff2": "/static/media/ibm-plex-sans-latin-wght-normal.b33a81b76947ac354369.woff2",
+    "static/media/basketball.webp": "/static/media/basketball.9909b07a4a42a7f9fba0.webp",
+    "static/media/jacket.webp": "/static/media/jacket.34cac3282484fbfae210.webp",
     "static/media/profile-ascii.txt": "/static/media/profile-ascii.8c99c8242ee0986578f6.txt",
+    "static/media/music.webp": "/static/media/music.26bf2dd8d60f731a9789.webp",
+    "static/media/league-gothic-latin-400-normal.woff2": "/static/media/league-gothic-latin-400-normal.a210dfcf47af9a1be603.woff2",
     "index.html": "/index.html",
-    "main.9bc520c1.css.map": "/static/css/main.9bc520c1.css.map",
-    "main.fdec726a.js.map": "/static/js/main.fdec726a.js.map",
-    "208.8dbc9277.chunk.js.map": "/static/js/208.8dbc9277.chunk.js.map",
-    "503.cf3c3d29.chunk.js.map": "/static/js/503.cf3c3d29.chunk.js.map",
-    "194.0e6a5f93.chunk.js.map": "/static/js/194.0e6a5f93.chunk.js.map"
+    "main.1275a7f1.css.map": "/static/css/main.1275a7f1.css.map",
+    "main.54708e07.js.map": "/static/js/main.54708e07.js.map",
+    "208.1006764b.chunk.js.map": "/static/js/208.1006764b.chunk.js.map",
+    "778.54fe14bc.chunk.js.map": "/static/js/778.54fe14bc.chunk.js.map",
+    "482.a1339168.chunk.js.map": "/static/js/482.a1339168.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9bc520c1.css",
-    "static/js/main.fdec726a.js"
+    "static/css/main.1275a7f1.css",
+    "static/js/main.54708e07.js"
   ]
 }

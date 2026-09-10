@@ -49,7 +49,7 @@
   content: 'JH\A 05 · CA';
   font-family: var(--utility-font);
   font-size: clamp(0.48rem, 0.8vw, 0.62rem);
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: 0.08em;
   line-height: 1.35;
   text-align: center;
@@ -106,7 +106,7 @@
   margin: 1rem 0 1.5rem;
   font-family: 'Times New Roman', Times, serif;
   font-size: clamp(2.8rem, 6vw, 6rem);
-  font-weight: 740;
+  font-weight: 700;
   letter-spacing: -0.065em;
   line-height: 0.92;
 }
@@ -123,7 +123,7 @@
   margin-top: 2rem;
   font-family: var(--display-font);
   font-size: clamp(1.05rem, 2.3vw, 1.65rem);
-  font-weight: 720;
+  font-weight: 700;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.35em;
 }
@@ -247,7 +247,7 @@
     color: var(--paper-elevated);
     font-family: var(--utility-font);
     font-size: clamp(0.48rem, 0.8vw, 0.62rem);
-    font-weight: 750;
+    font-weight: 700;
     letter-spacing: 0.08em;
     line-height: 1.35;
     pointer-events: none;

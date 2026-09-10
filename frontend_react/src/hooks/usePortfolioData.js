@@ -1,57 +1,39 @@
 import { useEffect, useState } from 'react';
 import { fallbackPortfolio, portfolioQuery } from '../data/portfolio';
+import { mergeRemoteWorks, normalizeWorks, readProjectCache, writeProjectCache } from '../data/projects';
 
-const localWorkByTitle = new Map(
-  fallbackPortfolio.works.map((work) => [work.title, work]),
-);
-
-const mergeRemoteWorks = (works) => works.map((work) => {
-  const localWork = localWorkByTitle.get(work.title);
-  return localWork ? { ...localWork, ...work, imageSlug: localWork.imageSlug } : work;
-});
-
-const withFallback = (remoteData) => ({
-  abouts: remoteData?.abouts?.length ? remoteData.abouts : fallbackPortfolio.abouts,
-  works: remoteData?.works?.length
-    ? mergeRemoteWorks(remoteData.works)
-    : fallbackPortfolio.works,
-  skills: remoteData?.skills?.length ? remoteData.skills : fallbackPortfolio.skills,
-  experiences: remoteData?.experiences?.length
-    ? remoteData.experiences
-    : fallbackPortfolio.experiences,
-});
-
+const snapshot = { ...fallbackPortfolio, works: normalizeWorks(fallbackPortfolio.works) };
+const initialPortfolio = () => {
+  try { return { ...snapshot, works: readProjectCache(window.localStorage) || snapshot.works }; }
+  catch { return snapshot; }
+};
 export const usePortfolioData = () => {
-  const [portfolio, setPortfolio] = useState(fallbackPortfolio);
-
+  const [portfolio, setPortfolio] = useState(initialPortfolio);
   useEffect(() => {
     let isCurrent = true;
-    let idleId;
-    let timeoutId;
-
+    let encountered = window.location.hash === '#work';
+    const work = document.getElementById('work');
+    const observer = new IntersectionObserver((entries) => { if (entries.some((entry) => entry.isIntersecting)) encountered = true; });
+    if (work) observer.observe(work);
     const refreshPortfolio = () => {
-      import('../client')
-        .then(({ client }) => client.fetch(portfolioQuery))
-        .then((data) => {
-          if (isCurrent) setPortfolio(withFallback(data));
-        })
-        .catch(() => {
-          // The bundled snapshot is intentionally the offline and first-paint state.
-        });
+      import('../client').then(({ client }) => client.fetch(portfolioQuery)).then((data) => {
+        if (!isCurrent) return;
+        const works = data?.works?.length ? mergeRemoteWorks(data.works, fallbackPortfolio.works) : null;
+        if (works?.length) {
+          try { writeProjectCache(window.localStorage, works); } catch { /* Private browsing fallback. */ }
+        }
+        setPortfolio((current) => encountered ? current : ({
+          abouts: data?.abouts?.length ? data.abouts : current.abouts,
+          skills: data?.skills?.length ? data.skills : current.skills,
+          experiences: data?.experiences?.length ? data.experiences : current.experiences,
+          // Also freeze preceding copy: changing its height would shift the encountered gallery.
+          works: works?.length ? works : current.works,
+        }));
+      }).catch(() => { /* The bundled snapshot remains usable offline. */ });
     };
-
-    if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(refreshPortfolio, { timeout: 1600 });
-    } else {
-      timeoutId = window.setTimeout(refreshPortfolio, 250);
-    }
-
-    return () => {
-      isCurrent = false;
-      if (idleId !== undefined) window.cancelIdleCallback(idleId);
-      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
-    };
+    const idle = 'requestIdleCallback' in window;
+    const id = idle ? window.requestIdleCallback(refreshPortfolio, { timeout: 1600 }) : window.setTimeout(refreshPortfolio, 250);
+    return () => { isCurrent = false; observer.disconnect(); if (idle) window.cancelIdleCallback(id); else window.clearTimeout(id); };
   }, []);
-
   return portfolio;
 };

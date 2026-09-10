@@ -1,10 +1,11 @@
 import React from 'react';
-import { m, useReducedMotion } from 'framer-motion';
+import { m } from 'framer-motion';
+import { motionEase, detailViewport } from '../../motion';
 import './About.scss';
 import { SectionShell } from '../../component';
-
-const interestNotes = ['Basketball', 'Working out', 'Fashion', 'Music', 'Collecting TCG'];
-const capabilityMarks = ['WEB', 'UX', 'SYS'];
+import CapabilityStack from './CapabilityStack';
+import InterestRebus from './InterestRebus';
+import { useHeroReducedMotion } from '../Header/useHeroIntro';
 
 const northAmericaMap = String.raw`       ⢀⡀ ⢀⢀⣄⡀⢀⡀
   ⠠⠠⢤⢀⠄⡠⡠⡈⢕⣔⡀⢀⡤⠠
@@ -34,7 +35,6 @@ const profileMapVisual = (
   </div>
 );
 
-const detailViewport = { once: true, amount: 0.25, margin: '0px 0px -16% 0px' };
 
 const CapabilitySchematic = ({ type, reduceMotion, index }) => {
   const motionProps = {
@@ -44,7 +44,7 @@ const CapabilitySchematic = ({ type, reduceMotion, index }) => {
     transition: {
       duration: 0.62,
       delay: index * 0.07,
-      ease: [0.22, 1, 0.36, 1],
+      ease: motionEase,
     },
   };
 
@@ -95,7 +95,7 @@ const CapabilitySchematic = ({ type, reduceMotion, index }) => {
 };
 
 const About = ({ abouts }) => {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useHeroReducedMotion();
 
   return (
     <SectionShell
@@ -106,53 +106,9 @@ const About = ({ abouts }) => {
       className="about-section"
       pageIndex={1}
     >
-      <div className="capability-list">
-        {abouts.map((about, index) => {
-          const mark = capabilityMarks[index] || 'DEV';
+      <CapabilityStack items={abouts} reduced={reduceMotion} renderVisual={(mark, index) => <CapabilitySchematic type={mark} reduceMotion={reduceMotion} index={index} />} />
 
-          return (
-            <div
-              className="capability-reveal"
-              key={about._id || about.title}
-            >
-              <article className={`capability capability--${mark.toLowerCase()}`}>
-                <span className="capability__mark" aria-hidden="true">{mark}</span>
-                <h3>{about.title}</h3>
-                <p>{about.description}</p>
-                <CapabilitySchematic
-                  type={mark}
-                  reduceMotion={reduceMotion}
-                  index={index}
-                />
-              </article>
-            </div>
-          );
-        })}
-      </div>
-
-      <aside
-        className="interest-note"
-        aria-labelledby="interest-note-title"
-      >
-        <p id="interest-note-title" className="eyebrow">Interests</p>
-        <ul>
-          {interestNotes.map((interest, index) => (
-            <m.li
-              key={interest}
-              initial={reduceMotion ? false : { opacity: 0, y: 9 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={detailViewport}
-              transition={{
-                duration: 0.46,
-                delay: index * 0.045,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              {interest}
-            </m.li>
-          ))}
-        </ul>
-      </aside>
+      <InterestRebus reduced={reduceMotion} />
     </SectionShell>
   );
 };

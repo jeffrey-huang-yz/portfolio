@@ -1,4 +1,3 @@
-export { default as JourneyRail } from './JourneyRail';
 export { default as Navbar } from './Navbar/Navbar';
 export { default as NavigationDots } from './NavigationDots';
 export { default as PaperJourney } from './PaperJourney';

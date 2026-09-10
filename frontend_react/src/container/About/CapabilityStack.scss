@@ -1,0 +1,38 @@
+.stack-scene { position: relative; overflow-anchor: none; margin-top: 2.5rem; }
+.stack-stage { position: relative; background: var(--paper-elevated); }
+.stack-intro { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-bottom: 2rem; }
+.stack-intro h3 { max-width: 19ch; margin: 0; font: 400 clamp(2rem, 3.8vw, 3.5rem)/1.05 var(--editorial-font); letter-spacing: -.035em; }
+.stack-steps { display: flex; gap: .75rem; flex-shrink: 0; padding: .5rem; }
+.stack-step { width: 3.25rem; height: 3.25rem; border: 1px solid var(--ink); background: transparent; color: var(--ink); font: 500 1rem var(--body-font); cursor: pointer; transition: background-color 160ms, color 160ms; }
+.stack-step--0 { border-radius: 50%; }
+.stack-step--1 { border-radius: .55rem; }
+.stack-step--2 { transform: rotate(45deg) scale(.8); }
+.stack-step--2 span { display: block; transform: rotate(-45deg) scale(1.25); }
+.stack-step[aria-current='step'] { background: var(--ink); color: var(--paper-elevated); }
+.stack-step:hover { background: var(--paper-muted); }
+.stack-step[aria-current='step']:hover { background: var(--ink); }
+.stack-card { border-top: 1px solid var(--line-strong); }
+.stack-card:last-child { border-bottom: 1px solid var(--line-strong); }
+.stack-card__title { margin: 0; }
+.stack-card__static-title { display: flex; align-items: center; gap: 1rem; width: 100%; min-height: 4.75rem; padding: 1rem 0; border: 0; background: transparent; text-align: left; color: var(--ink); font: 400 clamp(1.5rem, 2.4vw, 2.2rem)/1.1 var(--editorial-font); letter-spacing: -.025em; }
+.stack-card__number { font: 500 .7rem var(--body-font); color: var(--ink-soft); }
+.stack-card__detail { overflow: clip; }
+.stack-card__content { display: grid; grid-template-columns: 1fr minmax(12rem, .85fr); gap: 2rem; align-items: center; padding: .5rem 0 2rem 2.1rem; }
+.stack-card__content p { max-width: 40ch; margin: 0; font-size: 1rem; line-height: 1.6; color: var(--ink-soft); }
+.stack-card .capability__schematic { grid-column: auto; max-height: 9rem; width: 100%; margin: 0; }
+@media (max-width: 760px) {
+  .stack-intro { align-items: flex-start; flex-direction: column; gap: 1rem; padding-bottom: 1.5rem; }
+  .stack-intro h3 { font-size: 2rem; }
+  .stack-steps { padding: .25rem; }
+  .stack-step { width: 2.75rem; height: 2.75rem; }
+  .stack-card__static-title { min-height: 4rem; font-size: 1.45rem; gap: .6rem; }
+  .stack-card__content { grid-template-columns: 1fr; gap: 1rem; padding: .5rem 0 1.5rem; }
+  .stack-card .capability__schematic { max-height: 6.5rem; border: 0; padding: 0; }
+  .stack-card__content p { font-size: .925rem; }
+}
+@media (prefers-reduced-motion: reduce), print {
+  .stack-scene { height: auto !important; }
+  .stack-stage { transform: none !important; }
+  .stack-card__detail { height: auto !important; opacity: 1 !important; }
+  .stack-step { transition: none; }
+}
